@@ -35,6 +35,7 @@ I-Am-Alive/
 ├── README.md
 ├── TASK_A.md
 ├── TASK_B.md
+├── TAG_CHECKLIST.md
 └── AI_LOG.md
 ```
 
