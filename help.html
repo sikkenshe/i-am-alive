@@ -11,6 +11,18 @@
     <!-- Author: Bekkazy Bekarys -->
 
     <title>I Am Alive — How to Help</title>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/bekarys.css">
+
+    <!-- Internal style is used once to demonstrate the CSS cascade.
+     It overrides the external stylesheet for this specific heading. -->
+<style>
+    #support-form > h2 {
+        color: rgb(46, 125, 50);
+    }
+</style>
+
 </head>
 
 <body>
@@ -35,19 +47,19 @@
 
 <main>
 
-    <section id="support">
+    <section id="support" class="hero-section">
         <h2>Ways to Help</h2>
 
-        <p>
+        <p class="highlight-text">
             Supporting an animal shelter can involve time, supplies,
             responsible adoption or other forms of assistance.
         </p>
     </section>
 
-    <section>
+    <section class="volunteer-section">
         <h2>Volunteer</h2>
 
-        <article>
+        <article class="support-card">
             <h3>Spend Time at the Shelter</h3>
 
             <p>
@@ -62,7 +74,7 @@
         </article>
     </section>
 
-    <section>
+    <section class="supplies-section">
         <h2>Useful Supplies</h2>
 
         <p>
@@ -70,7 +82,7 @@
             types of useful support.
         </p>
 
-        <ul>
+        <ul class="support-list">
             <li>Animal food</li>
             <li>Groceries and meat products</li>
             <li>Blankets and towels</li>
@@ -79,7 +91,7 @@
         </ul>
     </section>
 
-    <section>
+    <section class="responsible-support">
         <h2>Responsible Support</h2>
 
         <article>
@@ -93,7 +105,7 @@
             </ol>
         </article>
 
-        <aside>
+        <aside class="support-note">
             <h3>Important Note</h3>
 
             <p>
@@ -103,19 +115,18 @@
         </aside>
     </section>
 
-    <section>
+    <section id="support-form" class="form-section">
         <h2>Support Request Form</h2>
 
         <p>
             Use this form to indicate how you would like to support the shelter.
         </p>
 
-        <!-- This form does not currently send data because this project
-             has no server-side application or database. -->
+        <!-- This form is for demonstrating HTML form structure. -->
 
         <form action="#" method="post">
 
-            <fieldset>
+            <fieldset class="form-fieldset">
                 <legend>Personal Information</legend>
 
                 <p>
@@ -176,7 +187,7 @@
 
             </fieldset>
 
-            <fieldset>
+            <fieldset class="form-fieldset">
                 <legend>How Would You Like to Help?</legend>
 
                 <p>
@@ -227,7 +238,7 @@
 
             </fieldset>
 
-            <fieldset>
+            <fieldset class="form-fieldset">
                 <legend>Additional Information</legend>
 
                 <p>
@@ -317,16 +328,15 @@
                 <input type="hidden" name="project" value="I-Am-Alive">
             </p>
 
-            <p>
+            <p class="form-buttons">
                 <input type="submit" value="Send Form">
-
                 <input type="reset" value="Reset Form">
             </p>
 
         </form>
     </section>
 
-    <section>
+    <section id="contact" class="contact-section contact-box">
         <h2>Contact Information</h2>
 
         <p>
@@ -343,7 +353,7 @@
         </address>
     </section>
 
-    <section>
+    <section class="external-links">
         <h2>External Information</h2>
 
         <p>

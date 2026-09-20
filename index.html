@@ -11,6 +11,9 @@
     <!-- Author: Bekkazy Bekarys -->
 
     <title>I Am Alive Animal Shelter — Astana</title>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/bekarys.css">
 </head>
 
 <body>
@@ -35,46 +38,45 @@
 
 <main>
 
-    <section id="about">
+    <section id="about" class="hero-section">
         <h2>About the Shelter</h2>
 
-        <p>
+        <p class="highlight-text">
             <strong>I Am Alive</strong> is an animal shelter in
             <em>Astana, Kazakhstan</em>.
             The shelter helps homeless animals and provides them with
             care, food, safety and an opportunity to find a home.
         </p>
 
-        <p>
-            The shelter is located in the Koktal area of Astana at
-            <b>Akkorgan Street 5V</b>.
-        </p>
+        <!-- Inline style is used once to demonstrate cascade priority
+         on one specific piece of content. -->
+    <p style="letter-spacing: 0.6px;">
+        The shelter is located in the Koktal area of Astana at
+        <b>Akkorgan Street 5V</b>.
+    </p>
     </section>
 
-    <section>
+    <section class="service-grid">
         <h2>What the Shelter Does</h2>
 
-        <article>
+        <article class="service-card">
             <h3>Care and Protection</h3>
-
             <p>
                 Animals arriving at the shelter can receive care,
                 food and medical assistance when needed.
             </p>
         </article>
 
-        <article>
+        <article class="service-card">
             <h3>Finding a Home</h3>
-
             <p>
                 The shelter gives visitors an opportunity to meet animals
                 and consider responsible adoption.
             </p>
         </article>
 
-        <article>
+        <article class="service-card">
             <h3>Volunteer Support</h3>
-
             <p>
                 Volunteers can help with activities such as walking dogs
                 and supporting the everyday needs of the shelter.
@@ -82,38 +84,38 @@
         </article>
     </section>
 
-   <section>
-    <h2>Photo Gallery</h2>
+    <section class="photo-gallery">
+        <h2>Photo Gallery</h2>
 
-    <figure>
-        <img src="images/dog-volunteer.jpeg"
-             alt="Dog and visitor during a visit to the I Am Alive animal shelter in Astana"
-             width="500">
-        <figcaption>
-            A photograph from a visit to the I Am Alive animal shelter.
-        </figcaption>
-    </figure>
+        <figure class="gallery-item">
+            <img src="images/dog-volunteer.jpeg"
+                 alt="Dog and visitor during a visit to the I Am Alive animal shelter in Astana"
+                 width="500">
+            <figcaption>
+                A photograph from a visit to the I Am Alive animal shelter.
+            </figcaption>
+        </figure>
 
-    <figure>
-        <img src="images/shelter-dog.jpeg"
-             alt="Dog staying at the I Am Alive animal shelter in Astana"
-             width="500">
-        <figcaption>
-            A dog at the I Am Alive animal shelter.
-        </figcaption>
-    </figure>
+        <figure class="gallery-item">
+            <img src="images/shelter-dog.jpeg"
+                 alt="Dog staying at the I Am Alive animal shelter in Astana"
+                 width="500">
+            <figcaption>
+                A dog at the I Am Alive animal shelter.
+            </figcaption>
+        </figure>
 
-    <figure>
-        <img src="images/dog-walk.jpeg"
-             alt="Volunteer walking a dog from the I Am Alive animal shelter"
-             width="500">
-        <figcaption>
-            Volunteer activity at the shelter.
-        </figcaption>
-    </figure>
-</section>
+        <figure class="gallery-item">
+            <img src="images/dog-walk.jpeg"
+                 alt="Volunteer walking a dog from the I Am Alive animal shelter"
+                 width="500">
+            <figcaption>
+                Volunteer activity at the shelter.
+            </figcaption>
+        </figure>
+    </section>
 
-    <section>
+    <section class="table-section">
         <h2>Real Shelter Information</h2>
 
         <table>
@@ -157,7 +159,7 @@
         </table>
     </section>
 
-    <aside>
+    <aside class="contact-box">
         <h2>Visiting Information</h2>
 
         <p>
@@ -165,8 +167,6 @@
             current information.
         </p>
 
-        <!-- Generic grouping is used here because the group has no additional
-             semantic meaning and is only used to keep related text together. -->
         <div>
             <p>
                 <span>Telephone:</span>
@@ -180,7 +180,7 @@
         </div>
     </aside>
 
-    <section>
+    <section class="help-options">
         <h2>How People Can Help</h2>
 
         <p>
@@ -204,7 +204,7 @@
         </ol>
     </section>
 
-    <section>
+    <section class="terms-section">
         <h2>Important Terms</h2>
 
         <dl>
@@ -228,7 +228,7 @@
         </dl>
     </section>
 
-    <section>
+    <section class="welfare-section">
         <h2>Animal Welfare</h2>
 
         <p>
@@ -263,12 +263,15 @@
         </p>
 
         <p>
-            <small>Information on this page should be checked with the shelter
-            before making a visit because contact details and schedules can change.</small>
+            <small>
+                Information on this page should be checked with the shelter
+                before making a visit because contact details and schedules
+                can change.
+            </small>
         </p>
     </section>
 
-    <section>
+    <section class="story-section">
         <h2>A Real Story</h2>
 
         <article>
@@ -285,6 +288,7 @@
                     "Все преодолимо. Мы же люди. Мы и больше сделать можем,
                     стоит только захотеть."
                 </p>
+
                 <cite>
                     — adopter quoted in a 2023 story about Jack
                 </cite>
@@ -302,7 +306,7 @@
         </article>
     </section>
 
-    <section>
+    <section class="html-demo">
         <h2>HTML Demonstration</h2>
 
         <p>
@@ -341,7 +345,7 @@
         </p>
     </section>
 
-    <section>
+    <section class="links-section">
         <h2>Useful Links</h2>
 
         <p>
