@@ -1,0 +1,249 @@
+/*
+    BASE STYLESHEET
+    Project: I Am Alive Animal Shelter
+    Student: Bekkazy Bekarys
+
+    Colour palette:
+    #102A43 — dark blue for the main structure and header
+    #243B53 — blue-gray for navigation and secondary areas
+    #F0F4F8 — light background for readability
+    white — named colour for text and cards
+    rgb(46, 125, 50) — green for animal welfare and action elements
+*/
+
+/* Universal selector: applies box-sizing to every element. */
+* {
+    box-sizing: border-box;
+}
+
+/* Type selector: establishes the base appearance of the page. */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #F0F4F8;
+    color: #102A43;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+}
+
+/* Second font family with a full fallback stack for headings. */
+h1,
+h2,
+h3 {
+    font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+/* Shared header styling. */
+header {
+    background-color: #102A43;
+    color: white;
+    padding: 40px 8%;
+    text-align: center;
+}
+
+/* ID selector: #top identifies the unique top element of the home page. */
+#top {
+    position: relative;
+}
+
+/* Navigation is a flex row. */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    background-color: #243B53;
+    padding: 18px 8%;
+}
+
+/* Descendant selector: links inside navigation. */
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 8px 12px;
+}
+
+/* Pseudo-class: changes navigation links when the pointer is over them. */
+nav a:hover {
+    background-color: rgb(46, 125, 50);
+}
+
+/* Pseudo-class: gives keyboard users a visible focus indicator. */
+nav a:focus {
+    outline: 3px solid white;
+    outline-offset: 3px;
+}
+
+/* Main content area. */
+main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+}
+
+/*
+    Box model demonstration:
+    margin, padding and border are deliberately used together.
+*/
+section {
+    margin: 0 0 40px;
+    padding: 28px;
+    border: 1px solid #243B53;
+    background-color: white;
+}
+
+/*
+    Margin-collapse note:
+    Adjacent vertical margins between block elements can collapse into one
+    margin instead of adding together. Padding and borders prevent that
+    behaviour inside this section.
+*/
+
+/* Class selector: reusable semantic card style. */
+.info-card {
+    padding: 20px;
+    margin: 16px 0;
+    border: 1px solid #243B53;
+    background-color: #F0F4F8;
+}
+
+/* Another class that can be reused for opening-hours information. */
+.opening-hours {
+    font-weight: 700;
+}
+
+/* Grouping selector: all main headings share these properties. */
+h1,
+h2,
+h3 {
+    color: #102A43;
+}
+
+/* Header headings need a light colour on the dark background. */
+header h1,
+header h2,
+header h3 {
+    color: white;
+}
+
+/* Child selector: only direct paragraphs of the header receive this spacing. */
+header > p {
+    margin-bottom: 0;
+}
+
+/* Adjacent sibling selector: paragraph immediately after a heading. */
+h2 + p {
+    margin-top: 0;
+}
+
+/* Attribute selector: targets links that open in a new tab. */
+a[target="_blank"] {
+    text-decoration: underline;
+}
+
+/* First-child pseudo-class. */
+section:first-child {
+    border-top: 4px solid rgb(46, 125, 50);
+}
+
+/* Pseudo-element adds a small visual marker before section headings. */
+section h2::before {
+    content: "🐾 ";
+}
+
+/* Links throughout the content. */
+a {
+    color: #2E7D32;
+}
+
+/* Images stay inside their containers. */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Figure styling. */
+figure {
+    margin: 20px 0;
+}
+
+/* Tables use the full available width. */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+}
+
+th,
+td {
+    border: 1px solid #243B53;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #243B53;
+    color: white;
+}
+
+/* Footer styling. */
+footer {
+    background-color: #102A43;
+    color: white;
+    padding: 32px 8%;
+    text-align: center;
+}
+
+footer a {
+    color: white;
+}
+
+/* Form controls share the same box model and typography. */
+input,
+select,
+textarea,
+button {
+    font: inherit;
+    max-width: 100%;
+}
+
+input,
+select,
+textarea {
+    padding: 10px;
+    border: 1px solid #243B53;
+}
+
+/* Labels are displayed clearly above their controls. */
+label {
+    display: block;
+    margin: 10px 0 6px;
+    font-weight: 700;
+}
+
+/* Buttons have a clear action style. */
+button {
+    padding: 10px 18px;
+    border: 1px solid #102A43;
+    background-color: #102A43;
+    color: white;
+    cursor: pointer;
+}
+
+/* Button hover demonstrates another pseudo-class. */
+button:hover {
+    background-color: rgb(46, 125, 50);
+}
+
+/*
+    Static positioning is the normal document flow.
+    It is explicitly declared here to demonstrate the required value.
+*/
+footer {
+    position: static;
+}
