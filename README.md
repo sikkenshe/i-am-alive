@@ -11,13 +11,12 @@ This is an academic project and is **not the official website of the shelter**.
 ## Technologies
 
 - HTML5
-- Semantic HTML
-- Basic HTML forms
-- HTML tables
-- Relative links
-- No CSS
-- No JavaScript
-- No frameworks
+- Bootstrap 5.3.8 via CDN
+- Bootstrap responsive grid, utilities, buttons, cards and navbar
+- Small custom CSS correction layer
+- Semantic HTML, forms and tables
+- Bootstrap JavaScript bundle only for Bootstrap components
+- No custom JavaScript
 - No backend/database
 
 ## Project structure
@@ -36,6 +35,8 @@ I-Am-Alive/
 ├── TASK_A.md
 ├── TASK_B.md
 ├── TAG_CHECKLIST.md
+├── BOOTSTRAP_CHANGES.md
+├── screenshots/
 └── AI_LOG.md
 ```
 
@@ -103,4 +104,4 @@ Validation checks the markup against HTML rules, but validation alone is not a c
 - Information about the shelter can change.
 - Current animal availability should be confirmed with the shelter.
 - The project does not represent the official shelter website.
-- The website intentionally uses basic HTML only because of the assignment requirements.
+- Assignment 3 keeps the existing HTML content and uses Bootstrap for layout, responsiveness, navigation, buttons and components. Custom CSS is only a small correction layer.

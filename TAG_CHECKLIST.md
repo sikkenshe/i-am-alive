@@ -1,5 +1,8 @@
 # HTML Tag Checklist
 
+> Historical note: this checklist documents the earlier HTML assignment version of the project. Assignment 3 keeps it as prior coursework evidence; current Bootstrap changes are listed in `BOOTSTRAP_CHANGES.md`.
+
+
 **Project:** I Am Alive Animal Shelter  
 **Student:** Bekkazy Bekarys  
 **Course:** Introduction to Web Technologies
