@@ -39,3 +39,8 @@ The student created and edited the project in VS Code, saved the files, checked 
 ## Important limitation
 
 AI was not used to generate or replace the required authentic shelter photographs. The website uses locally saved photographs from a published source.
+
+
+## Midterm preparation update (2026-10-09)
+
+AI was used to review the project against the Midterm requirements and suggest focused changes while preserving the existing page layout and Bootstrap approach. The work included preparing a realistic support-request form using an external email-forwarding service, adding form/result hooks and CSS state classes, drafting three user journeys, and adding a manual quality-pass checklist. The student must configure and verify the form recipient, test the website in a browser, run the W3C validator, update current screenshots, and review the changes before submission.

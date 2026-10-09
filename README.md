@@ -16,8 +16,9 @@ This is an academic project and is **not the official website of the shelter**.
 - Small custom CSS correction layer
 - Semantic HTML, forms and tables
 - Bootstrap JavaScript bundle only for Bootstrap components
-- No custom JavaScript
-- No backend/database
+- No custom JavaScript (Bootstrap bundle only)
+- No project-owned backend/database
+- FormSubmit external service is used for support-request email delivery after its recipient address is configured
 
 ## Project structure
 
@@ -87,9 +88,46 @@ target="_blank"
 rel="noopener noreferrer"
 ```
 
-## Form limitation
+## Support request form
 
-The form on `help.html` is for demonstrating HTML form elements. It does not actually send or store submissions because this project has no server-side application or database.
+The form on `help.html` uses FormSubmit to forward support requests to an email inbox without a project-owned backend or database.
+
+**One-time setup required before testing:** replace `YOUR_EMAIL_HERE` in the form's `action` URL with the email address that should receive submissions. FormSubmit may send a verification email to that address; complete its verification step. Do not collect passwords or other sensitive information in this form. Submissions are handled by an external service and are not stored in this repository.
+
+After submission, FormSubmit displays its confirmation page. The on-page `form-result` status area explains what will happen before the visitor submits the form.
+
+## Midterm user journeys
+
+### Journey 1 — Learn about the shelter and its animals
+
+1. Start on `index.html`.
+2. Read the shelter introduction and contact information.
+3. Use the main navigation to open `animals.html`.
+4. Read the animal information and responsible-adoption guidance.
+5. Use the contact section to find the shelter phone/email, or open `help.html` to explore ways to help.
+6. End when the visitor has found animal/adoption information and a clear next step.
+
+### Journey 2 — Send a support request
+
+1. Start on `index.html`.
+2. Open `help.html` from the main navigation.
+3. Read the volunteer, supplies and responsible-support sections.
+4. Complete the required name, email, support type and preferred contact method fields; optionally add visit details and a message.
+5. Submit the form.
+6. FormSubmit processes the request and shows its confirmation page once the recipient has been configured and verified.
+7. End when the visitor sees the service confirmation page.
+
+### Journey 3 — Find shelter contact and location
+
+1. Start on any page.
+2. Use the shared main navigation to open `help.html` or `index.html`.
+3. Find the address and telephone number.
+4. Use the telephone link to call from a compatible device, the email link to compose a message, or the Yandex Maps link to view the location.
+5. End when the visitor has a direct way to contact the shelter or find its location.
+
+## Quality pass (to complete before submission)
+
+See `QUALITY_PASS.md`. Record the date, page/device, issue found and fix. Do not mark a check complete until it has been tested in a browser or with the relevant validator. The screenshots already in `screenshots/` were captured before these Midterm changes; recapture current desktop and phone screenshots before submission.
 
 ## Validation
 

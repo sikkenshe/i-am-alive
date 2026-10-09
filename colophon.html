@@ -32,7 +32,7 @@
         I Am Alive
       </a>
 
-      <button aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#mainNavbar" data-bs-toggle="collapse" type="button">
+      <button aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" id="navbar-toggle" data-bs-target="#mainNavbar" data-bs-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -262,10 +262,10 @@
         The How to Help page contains an HTML form with different input types, labels, radio buttons, a checkbox, a select menu, a textarea and submit/reset controls.
       </p>
       <p>
-        The form is included for educational purposes. It does not currently send or store information because the project does not have a server-side application.
+        The support form on the How to Help page uses the external FormSubmit service to forward requests to a configured email inbox. The recipient address must be set and verified before submissions can be tested.
       </p>
       <p class="mb-0">
-        The form therefore demonstrates the HTML structure of a form, rather than providing a real online submission service.
+        The project has no custom backend or database. Form submissions are handled by the external provider, and the site does not store them locally.
       </p>
     </section>
 
@@ -276,7 +276,7 @@
       <ul class="mb-0">
         <li>Assignment 3 uses Bootstrap for layout, spacing, navigation, buttons and responsive behaviour.</li>
         <li>No custom JavaScript is used; only the Bootstrap bundle supports Bootstrap components.</li>
-        <li>No backend server is connected.</li>
+        <li>No project-owned backend server or database is connected; the support form uses an external email-forwarding service.</li>
         <li>Information may change over time.</li>
         <li>Current shelter information should be confirmed directly.</li>
       </ul>

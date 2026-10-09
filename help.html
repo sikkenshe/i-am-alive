@@ -32,7 +32,7 @@
         I Am Alive
       </a>
 
-      <button aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#mainNavbar" data-bs-toggle="collapse" type="button">
+      <button aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" id="navbar-toggle" data-bs-target="#mainNavbar" data-bs-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
       </button>
 
@@ -133,149 +133,99 @@
         Support Request Form
       </h2>
       <p>
-        Use this form to indicate how you would like to support the shelter.
+        Complete the form below to tell the shelter how you would like to help. Required fields are marked by the browser. When you submit the form, the request will be sent to the email address configured for this project through FormSubmit, an external form service.
       </p>
 
-      <!-- This form is for demonstrating HTML form structure. -->
-      <form action="#" method="post">
+      <!-- Replace YOUR_EMAIL_HERE with the inbox that should receive support requests. -->
+      <form action="https://formsubmit.co/bekkazyata@gmail.com" id="support-request-form" method="POST">
+        <input name="_subject" type="hidden" value="New I Am Alive support request"/>
+        <input name="_template" type="hidden" value="table"/>
+        <input name="project" type="hidden" value="I Am Alive animal shelter project"/>
+        <!-- Honeypot field helps the form service filter automated spam. -->
+        <input aria-hidden="true" autocomplete="off" class="visually-hidden" name="_honey" tabindex="-1" type="text"/>
+
         <fieldset class="border rounded-3 p-3 p-md-4 mb-4">
-          <legend class="float-none w-auto px-2 h5 fw-bold">
-            Personal Information
-          </legend>
+          <legend class="float-none w-auto px-2 h5 fw-bold">Personal Information</legend>
 
-          <p>
-            <label class="form-label" for="full-name">Full name:</label>
-            <br/>
-            <input class="form-control" id="full-name" name="full-name" placeholder="Enter your full name" required="" type="text"/>
-          </p>
+          <div class="mb-3">
+            <label class="form-label" for="full-name">Full name <span aria-hidden="true">*</span></label>
+            <input autocomplete="name" class="form-control" id="full-name" name="full-name" placeholder="Enter your full name" required type="text"/>
+          </div>
 
-          <p>
-            <label class="form-label" for="email">Email:</label>
-            <br/>
-            <input class="form-control" id="email" name="email" placeholder="example@email.com" required="" type="email"/>
-          </p>
+          <div class="mb-3">
+            <label class="form-label" for="email">Email <span aria-hidden="true">*</span></label>
+            <input autocomplete="email" class="form-control" id="email" name="email" placeholder="example@email.com" required type="email"/>
+          </div>
 
-          <p>
-            <label class="form-label" for="phone">Phone number:</label>
-            <br/>
-            <input class="form-control" id="phone" name="phone" placeholder="+7 700 000 00 00" type="tel"/>
-          </p>
-
-          <p>
-            <label class="form-label" for="password">Example account password:</label>
-            <br/>
-            <input class="form-control" id="password" name="password" placeholder="Enter a password" type="password"/>
-          </p>
-
-          <p>
-            <label class="form-label" for="website">Personal website:</label>
-            <br/>
-            <input class="form-control" id="website" name="website" placeholder="https://example.com" type="url"/>
-          </p>
-
-          <p class="mb-0">
-            <label class="form-label" for="search">Search:</label>
-            <br/>
-            <input class="form-control" id="search" name="search" placeholder="Search support options" type="search"/>
-          </p>
+          <div class="mb-0">
+            <label class="form-label" for="phone">Phone number (optional)</label>
+            <input autocomplete="tel" class="form-control" id="phone" name="phone" placeholder="+7 700 000 00 00" type="tel"/>
+          </div>
         </fieldset>
 
         <fieldset class="border rounded-3 p-3 p-md-4 mb-4">
-          <legend class="float-none w-auto px-2 h5 fw-bold">
-            How Would You Like to Help?
-          </legend>
+          <legend class="float-none w-auto px-2 h5 fw-bold">How Would You Like to Help?</legend>
 
-          <p>
-            <label class="form-label" for="help-type">Main type of support:</label>
-            <br/>
-            <select class="form-select" id="help-type" name="help-type" required="">
+          <div class="mb-3">
+            <label class="form-label" for="help-type">Main type of support <span aria-hidden="true">*</span></label>
+            <select class="form-select" id="help-type" name="help-type" required>
               <option value="">-- Select an option --</option>
               <option value="volunteer">Volunteer</option>
               <option value="supplies">Donate supplies</option>
               <option value="adoption">Learn about adoption</option>
               <option value="other">Other support</option>
             </select>
-          </p>
-
-          <p class="mb-2">Preferred contact method:</p>
-          <div class="mb-3">
-            <input class="form-check-input" id="contact-email" name="contact-method" required="" type="radio" value="email"/>
-            <label class="form-label me-3" for="contact-email">Email</label>
-
-            <input class="form-check-input" id="contact-phone" name="contact-method" type="radio" value="phone"/>
-            <label class="form-label" for="contact-phone">Phone</label>
           </div>
 
-          <p class="mb-0">
+          <fieldset class="mb-3">
+            <legend class="form-label fs-6">Preferred contact method <span aria-hidden="true">*</span></legend>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" id="contact-email" name="contact-method" required type="radio" value="email"/>
+              <label class="form-check-label" for="contact-email">Email</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" id="contact-phone" name="contact-method" required type="radio" value="phone"/>
+              <label class="form-check-label" for="contact-phone">Phone</label>
+            </div>
+          </fieldset>
+
+          <div class="form-check mb-0">
             <input class="form-check-input" id="volunteer-agreement" name="volunteer-agreement" type="checkbox" value="yes"/>
-            <label class="form-label mb-0" for="volunteer-agreement">
-              I understand that volunteering requires following the shelter's current rules.
-            </label>
-          </p>
+            <label class="form-check-label" for="volunteer-agreement">I understand that volunteering requires following the shelter's current rules.</label>
+          </div>
         </fieldset>
 
         <fieldset class="border rounded-3 p-3 p-md-4 mb-4">
-          <legend class="float-none w-auto px-2 h5 fw-bold">
-            Additional Information
-          </legend>
+          <legend class="float-none w-auto px-2 h5 fw-bold">Additional Information</legend>
 
-          <p>
-            <label class="form-label" for="visit-date">Preferred visit date:</label>
-            <br/>
+          <div class="mb-3">
+            <label class="form-label" for="visit-date">Preferred visit date (optional)</label>
             <input class="form-control" id="visit-date" name="visit-date" type="date"/>
-          </p>
+          </div>
 
-          <p>
-            <label class="form-label" for="support-time">Preferred contact time:</label>
-            <br/>
+          <div class="mb-3">
+            <label class="form-label" for="support-time">Preferred contact time (optional)</label>
             <input class="form-control" id="support-time" name="support-time" type="time"/>
-          </p>
+          </div>
 
-          <p>
-            <label class="form-label" for="quantity">Number of supply packages:</label>
-            <br/>
+          <div class="mb-3">
+            <label class="form-label" for="quantity">Number of supply packages (if relevant)</label>
             <input class="form-control" id="quantity" max="20" min="1" name="quantity" placeholder="1" type="number"/>
-          </p>
+          </div>
 
-          <p>
-            <label class="form-label" for="satisfaction">How prepared do you feel to help?</label>
-            <br/>
-            <input class="form-range" id="satisfaction" max="10" min="1" name="satisfaction" type="range" value="5"/>
-          </p>
-
-          <p>
-            <label class="form-label" for="favorite-date">Another date:</label>
-            <br/>
-            <input class="form-control" id="favorite-date" name="favorite-date" type="month"/>
-          </p>
-
-          <p>
-            <label class="form-label" for="week">Preferred week:</label>
-            <br/>
-            <input class="form-control" id="week" name="week" type="week"/>
-          </p>
-
-          <p>
-            <label class="form-label" for="color">Favourite animal-themed colour:</label>
-            <br/>
-            <input class="form-control form-control-color" id="color" name="color" type="color" value="#808080"/>
-          </p>
-
-          <p class="mb-0">
-            <label class="form-label" for="message">Message:</label>
-            <br/>
-            <textarea class="form-control" cols="50" id="message" name="message" placeholder="Tell us how you would like to help..." rows="6"></textarea>
-          </p>
+          <div class="mb-0">
+            <label class="form-label" for="message">Message or questions</label>
+            <textarea class="form-control" id="message" name="message" placeholder="Tell us how you would like to help..." rows="5"></textarea>
+          </div>
         </fieldset>
 
-        <input name="project" type="hidden" value="I-Am-Alive"/>
+        <div class="form-result alert alert-info" id="form-result" role="status">
+          After you submit the form, FormSubmit will process the request and show its confirmation page. This project does not store submissions in a local database.
+        </div>
 
         <p class="d-flex flex-wrap gap-2 align-items-center mb-0">
-          <input class="btn btn-success btn-lg" type="submit" value="Send Form"/>
-          <input class="btn btn-outline-secondary" type="reset" value="Reset Form"/>
-          <button class="btn btn-secondary btn-sm" disabled="" type="button">
-            Online submission unavailable
-          </button>
+          <button class="btn btn-success btn-lg" id="submit-support-request" type="submit">Send Support Request</button>
+          <button class="btn btn-outline-secondary" id="reset-support-form" type="reset">Clear Form</button>
         </p>
       </form>
     </section>
@@ -285,7 +235,7 @@
         Contact Information
       </h2>
       <p>
-        You can contact the shelter directly:
+        You can contact the shelter directly. The support request form is a separate student-project feature and should not be treated as the shelter's official booking or donation system.
       </p>
       <address class="mb-0">
         Akkorgan Street 5V<br/>

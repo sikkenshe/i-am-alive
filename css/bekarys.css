@@ -15,3 +15,32 @@
     height: 280px;
     object-fit: cover;
 }
+
+/* Midterm: state classes prepared for future JavaScript. They are not triggered yet. */
+.is-hidden {
+    display: none !important;
+}
+
+.is-active {
+    outline: 2px solid rgb(46, 125, 50);
+    outline-offset: 2px;
+}
+
+.is-selected {
+    border-color: rgb(46, 125, 50) !important;
+    box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.15);
+}
+
+.has-error {
+    border-color: #b02a37 !important;
+}
+
+.is-success {
+    border-color: rgb(46, 125, 50) !important;
+    background-color: #f0f8f0;
+}
+
+/* Keep the future result hook readable if a message is inserted into it. */
+.form-result:empty {
+    display: none;
+}
