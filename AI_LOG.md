@@ -44,3 +44,8 @@ AI was not used to generate or replace the required authentic shelter photograph
 ## Midterm preparation update (2026-10-09)
 
 AI was used to review the project against the Midterm requirements and suggest focused changes while preserving the existing page layout and Bootstrap approach. The work included preparing a realistic support-request form using an external email-forwarding service, adding form/result hooks and CSS state classes, drafting three user journeys, and adding a manual quality-pass checklist. The student must configure and verify the form recipient, test the website in a browser, run the W3C validator, update current screenshots, and review the changes before submission.
+
+
+## Assignment 4–5 assistance log (2026-10-29)
+
+AI assistance was used to review the Assignment 4–5 requirements and prepare a vanilla-JavaScript implementation for the existing project. The implementation adds `js/main.js`, `js/index.js`, `js/animals.js` and `js/help.js`; adds only deferred script links to existing HTML pages; and updates this README with the functionality plan and checklist. The code is intended for the student to review, test and explain. It creates no backend and the support form is handled as a local front-end demonstration; no request is submitted to FormSubmit by the JavaScript flow.

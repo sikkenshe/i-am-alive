@@ -16,7 +16,7 @@ This is an academic project and is **not the official website of the shelter**.
 - Small custom CSS correction layer
 - Semantic HTML, forms and tables
 - Bootstrap JavaScript bundle only for Bootstrap components
-- No custom JavaScript (Bootstrap bundle only)
+- Vanilla JavaScript in `js/` (no jQuery or other JavaScript framework)
 - No project-owned backend/database
 - FormSubmit external service is used for support-request email delivery after its recipient address is configured
 
@@ -90,11 +90,7 @@ rel="noopener noreferrer"
 
 ## Support request form
 
-The form on `help.html` uses FormSubmit to forward support requests to an email inbox without a project-owned backend or database.
-
-**One-time setup required before testing:** replace `YOUR_EMAIL_HERE` in the form's `action` URL with the email address that should receive submissions. FormSubmit may send a verification email to that address; complete its verification step. Do not collect passwords or other sensitive information in this form. Submissions are handled by an external service and are not stored in this repository.
-
-After submission, FormSubmit displays its confirmation page. The on-page `form-result` status area explains what will happen before the visitor submits the form.
+The support form is a front-end demonstration. The Assignment 4–5 JavaScript prevents normal form submission, validates the fields in the browser and displays a summary with a temporary demonstration reference. **No form data is sent to FormSubmit or another server; no real booking, payment or order is created.** The `action` attribute remains in the original HTML for minimal structural change, but JavaScript intercepts the submit event.
 
 ## Midterm user journeys
 
@@ -107,15 +103,15 @@ After submission, FormSubmit displays its confirmation page. The on-page `form-r
 5. Use the contact section to find the shelter phone/email, or open `help.html` to explore ways to help.
 6. End when the visitor has found animal/adoption information and a clear next step.
 
-### Journey 2 — Send a support request
+### Journey 2 — Prepare a support request demonstration
 
 1. Start on `index.html`.
 2. Open `help.html` from the main navigation.
-3. Read the volunteer, supplies and responsible-support sections.
-4. Complete the required name, email, support type and preferred contact method fields; optionally add visit details and a message.
-5. Submit the form.
-6. FormSubmit processes the request and shows its confirmation page once the recipient has been configured and verified.
-7. End when the visitor sees the service confirmation page.
+3. Search/filter support options and choose one.
+4. Complete the required name, email, support type and contact method fields; optionally add visit details and a message.
+5. Correct any field-level errors, then submit.
+6. Review the summary and temporary demonstration reference. No data is sent to a server and no real booking, payment or order is created.
+7. End when the visitor has reviewed the prepared request summary.
 
 ### Journey 3 — Find shelter contact and location
 
@@ -143,3 +139,38 @@ Validation checks the markup against HTML rules, but validation alone is not a c
 - Current animal availability should be confirmed with the shelter.
 - The project does not represent the official shelter website.
 - Assignment 3 keeps the existing HTML content and uses Bootstrap for layout, responsiveness, navigation, buttons and components. Custom CSS is only a small correction layer.
+
+
+## Assignment 4–5 Functionality Plan
+
+| Page | Visitor goal | Planned/implemented function | Expected result | Responsible student |
+|---|---|---|---|---|
+| All pages | Navigate long pages comfortably | `js/main.js`: creates an accessible Back to top button with DOM methods and click/scroll events | Button appears after scrolling and returns the visitor to the top | Bekkazy Bekarys |
+| `index.html` | Find a practical way to help | `js/index.js`: six real-theme suggestions, one selected randomly, with a button to the support form and a button to choose another | Visitor sees a useful suggestion and can continue to the help form | Bekkazy Bekarys |
+| `animals.html` | Find relevant animal-care information | `js/animals.js`: live search, topic filter, result count, empty state, reset control and contact action on existing cards | Visitor can narrow the existing information and find a next step | Bekkazy Bekarys |
+| `help.html` | Explore and choose support | `js/help.js`: six support objects, reusable card rendering, search/category/sort controls, count, empty state, reset and selection into the form | Visitor can find and choose a relevant support type | Bekkazy Bekarys |
+| `help.html` | Estimate planning effort and submit a valid demo request | `js/help.js`: live effort calculation and field-level validation for name, email, support selection, quantity/date rules and phone/contact-method consistency | Invalid input gets specific errors and focus; valid input produces a summary and random demo reference | Bekkazy Bekarys |
+
+## Assignment 4–5 JavaScript Checklist
+
+- [x] `js/main.js`: `'use strict'`, shared DOM behaviour, `const`, function with return-independent event flow, `Math.random()`, `addEventListener()` click and scroll.
+- [x] `js/index.js`: six suggestion objects, array traversal, random featured suggestion, click event and meaningful navigation.
+- [x] `js/animals.js`: search and topic filtering, loops, conditions, DOM-created controls, result count, empty state, reset, contact actions.
+- [x] `js/help.js`: six support objects with six properties each, filtering/sorting, reusable DOM card rendering, `find`, arithmetic effort estimate, `Math.random()` demonstration reference, `submit`, `click`, `input` and `change` events.
+- [x] Validation: trimmed name, email format, required support type, quantity range/integer, no past visit date, contact method selection, phone required when phone contact is chosen; specific errors, first invalid field focus, outdated error clearing and valid summary.
+- [x] Dynamic content is created with DOM methods and visitor-entered text is output with `textContent`; user input is not inserted into `innerHTML`.
+- [x] All four HTML files load `js/main.js` with `defer`; page-specific files are loaded only where needed, also with `defer`.
+- [x] No project CSS rules were added and no page content blocks were added directly to HTML; only script links were added.
+- [ ] Before submission, manually test all flows at 375 px, 768 px and desktop width, inspect the browser console, validate all HTML, update screenshots/evidence, and create the required Git tags/commits.
+
+
+### JavaScript file/line reference (checklist)
+
+Line references below refer to the current files in `js/` and may shift if the code is edited.
+
+| File | Main implementation areas |
+|---|---|
+| `js/main.js` | Lines 8–39: shared DOM-created Back to top control, click/scroll events and temporary reference |
+| `js/index.js` | Lines 4–54: six suggestion objects, random initial suggestion, DOM rendering and button action |
+| `js/animals.js` | Lines 4–105: controls, existing-card actions, search/filter traversal, result count, empty state and reset |
+| `js/help.js` | Lines 4–34: support data and setup; lines 124–205: dynamic search/filter/sort/card rendering; lines 211–254: planning estimate and calculation helper; lines 257–309: field validation; lines 311–386: submit summary and reset |

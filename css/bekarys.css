@@ -1,3 +1,4 @@
+/* Personal Assignment 3 corrections kept intentionally small. */
 .highlight-text {
     letter-spacing: 0.02em;
 }
@@ -15,7 +16,7 @@
     object-fit: cover;
 }
 
-/* Midterm: state classes prepared for future JavaScript. */
+/* Midterm: state classes prepared for future JavaScript. They are not triggered yet. */
 .is-hidden {
     display: none !important;
 }
