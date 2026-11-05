@@ -1,387 +1,253 @@
 'use strict';
-
-document.addEventListener('DOMContentLoaded', function () {
-  const helpPage = document.querySelector('#support-form');
-  if (helpPage === null) {
-    return;
-  }
-
-  // Realistic support choices; effort is a planning score, not a price.
-  const helpOptions = [
-    { id: 1, title: 'Volunteer', category: 'volunteer', description: 'Give your time to help animals and support everyday shelter needs.', effort: 2, unit: 'visit' },
-    { id: 2, title: 'Donate Supplies', category: 'supplies', description: 'Provide food, blankets, towels, medical or household supplies.', effort: 1, unit: 'package' },
-    { id: 3, title: 'Support Adoption', category: 'adoption', description: 'Learn about responsible adoption and the long-term care animals need.', effort: 3, unit: 'step' },
-    { id: 4, title: 'Share Our Mission', category: 'other', description: 'Tell others about the shelter and encourage responsible animal care.', effort: 1, unit: 'share' },
-    { id: 5, title: 'Help with Transport', category: 'volunteer', description: 'Ask the shelter whether transport help is currently needed.', effort: 2, unit: 'trip' },
-    { id: 6, title: 'Prepare Supplies', category: 'supplies', description: 'Sort and organize useful supplies for animals at the shelter.', effort: 2, unit: 'package' }
-  ];
-
-  const form = document.querySelector('#support-request-form');
-  const formIntro = helpPage.querySelector('p');
-  if (formIntro) {
-    formIntro.textContent = 'Use this demonstration form to describe how you would like to help. The form validates your choices locally and displays a summary; it does not send data to a server or create a real booking, payment or order.';
-  }
-  const result = document.querySelector('#form-result');
-  const supportType = document.querySelector('#help-type');
-  const quantity = document.querySelector('#quantity');
-  const visitDate = document.querySelector('#visit-date');
-  const phone = document.querySelector('#phone');
-  const contactPhone = document.querySelector('#contact-phone');
-  const contactEmail = document.querySelector('#contact-email');
-  if (!form || !result || !supportType || !quantity || !visitDate || !phone) {
-    return;
-  }
-  // Use our field-level messages instead of the browser's generic validation bubble.
-  form.noValidate = true;
-
-  // The original page sections stay in place. Controls and cards are created by JavaScript.
-  const chooser = document.createElement('section');
-  chooser.className = 'border rounded-3 p-3 mb-4';
-  chooser.setAttribute('aria-labelledby', 'support-choices-title');
-  const title = document.createElement('h3');
-  title.id = 'support-choices-title';
-  title.className = 'h5 fw-bold';
-  title.textContent = 'Explore ways to help';
-  chooser.appendChild(title);
-
-  const controls = document.createElement('div');
-  controls.className = 'row g-3 mb-3';
-  const searchWrap = document.createElement('div');
-  searchWrap.className = 'col-12 col-md-5';
-  const searchLabel = document.createElement('label');
-  searchLabel.className = 'form-label';
-  searchLabel.htmlFor = 'support-search';
-  searchLabel.textContent = 'Search support options';
-  const search = document.createElement('input');
-  search.type = 'search';
-  search.id = 'support-search';
-  search.className = 'form-control';
-  search.placeholder = 'e.g. supplies or walking';
-  searchWrap.append(searchLabel, search);
-
-  const categoryWrap = document.createElement('div');
-  categoryWrap.className = 'col-12 col-md-4';
-  const categoryLabel = document.createElement('label');
-  categoryLabel.className = 'form-label';
-  categoryLabel.htmlFor = 'support-category';
-  categoryLabel.textContent = 'Category';
-  const category = document.createElement('select');
-  category.id = 'support-category';
-  category.className = 'form-select';
-  [
-    ['all', 'All categories'], ['volunteer', 'Volunteer'], ['supplies', 'Supplies'],
-    ['adoption', 'Adoption'], ['other', 'Other support']
-  ].forEach(function (item) {
-    const option = document.createElement('option');
-    option.value = item[0];
-    option.textContent = item[1];
-    category.appendChild(option);
-  });
-  categoryWrap.append(categoryLabel, category);
-
-  const sortWrap = document.createElement('div');
-  sortWrap.className = 'col-12 col-md-3';
-  const sortLabel = document.createElement('label');
-  sortLabel.className = 'form-label';
-  sortLabel.htmlFor = 'support-sort';
-  sortLabel.textContent = 'Sort by';
-  const sort = document.createElement('select');
-  sort.id = 'support-sort';
-  sort.className = 'form-select';
-  [['default', 'Recommended'], ['effort', 'Planning effort'], ['title', 'Name A–Z']].forEach(function (item) {
-    const option = document.createElement('option');
-    option.value = item[0];
-    option.textContent = item[1];
-    sort.appendChild(option);
-  });
-  sortWrap.append(sortLabel, sort);
-  controls.append(searchWrap, categoryWrap, sortWrap);
-  chooser.appendChild(controls);
-
-  const resultCount = document.createElement('p');
-  resultCount.className = 'small text-muted mb-2';
-  resultCount.setAttribute('aria-live', 'polite');
-  resultCount.id = 'support-result-count';
-  chooser.appendChild(resultCount);
-
-  const cards = document.createElement('div');
-  cards.className = 'row g-3';
-  cards.id = 'support-option-list';
-  chooser.appendChild(cards);
-
-  const empty = document.createElement('p');
-  empty.className = 'alert alert-info mt-3 mb-0 is-hidden';
-  empty.textContent = 'No support options match your search. Try another word or reset the filters.';
-  empty.setAttribute('role', 'status');
-  chooser.appendChild(empty);
-
-  const reset = document.createElement('button');
-  reset.type = 'button';
-  reset.className = 'btn btn-outline-secondary mt-3';
-  reset.textContent = 'Reset filters';
-  chooser.appendChild(reset);
-
-  helpPage.insertBefore(chooser, form);
-
-  function createOptionCard(option) {
-    const column = document.createElement('div');
-    column.className = 'col-12 col-md-6 col-lg-4';
-    const card = document.createElement('article');
-    card.className = 'card h-100';
-    const body = document.createElement('div');
-    body.className = 'card-body d-flex flex-column';
-    const heading = document.createElement('h4');
-    heading.className = 'h5 card-title';
-    heading.textContent = option.title;
-    const description = document.createElement('p');
-    description.className = 'card-text';
-    description.textContent = option.description;
-    const effortText = document.createElement('p');
-    effortText.className = 'small text-muted mt-auto';
-    effortText.textContent = 'Planning effort: ' + option.effort + ' point(s) per ' + option.unit + '.';
-    const choose = document.createElement('button');
-    choose.type = 'button';
-    choose.className = 'btn btn-success';
-    choose.textContent = 'Choose this option';
-    choose.addEventListener('click', function () {
-      supportType.value = option.category;
-      supportType.dispatchEvent(new Event('change', { bubbles: true }));
-      cards.querySelectorAll('.card').forEach(function (otherCard) {
-        otherCard.classList.remove('is-selected');
-      });
-      card.classList.add('is-selected');
-      const message = document.createElement('p');
-      message.className = 'small text-success mt-2 mb-0';
-      message.setAttribute('role', 'status');
-      message.textContent = option.title + ' selected. Complete the form below to prepare a demonstration request.';
-      const oldMessage = chooser.querySelector('.selection-feedback');
-      if (oldMessage) oldMessage.remove();
-      message.classList.add('selection-feedback');
-      choose.insertAdjacentElement('afterend', message);
-      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    body.append(heading, description, effortText, choose);
-    card.appendChild(body);
-    column.appendChild(card);
-    return column;
-  }
-
-  function getVisibleOptions() {
-    const phrase = search.value.trim().toLowerCase();
-    let visible = helpOptions.filter(function (option) {
-      const searchable = (option.title + ' ' + option.category + ' ' + option.description).toLowerCase();
-      return (phrase === '' || searchable.includes(phrase)) &&
-        (category.value === 'all' || option.category === category.value);
-    });
-    if (sort.value === 'effort') {
-      visible = visible.slice().sort(function (a, b) { return a.effort - b.effort; });
-    } else if (sort.value === 'title') {
-      visible = visible.slice().sort(function (a, b) { return a.title.localeCompare(b.title); });
-    }
-    return visible;
-  }
-
-  function renderOptions() {
-    cards.replaceChildren();
-    const visible = getVisibleOptions();
-    visible.forEach(function (option) {
-      cards.appendChild(createOptionCard(option));
-    });
-    resultCount.textContent = visible.length + ' of ' + helpOptions.length + ' support options shown.';
-    empty.classList.toggle('is-hidden', visible.length !== 0);
-  }
-
-  search.addEventListener('input', renderOptions);
-  category.addEventListener('change', renderOptions);
-  sort.addEventListener('change', renderOptions);
-  reset.addEventListener('click', function () {
-    search.value = '';
-    category.value = 'all';
-    sort.value = 'default';
-    renderOptions();
-    search.focus();
-  });
-  renderOptions();
-
-  // Estimate planning effort only; this is not a monetary price or a real commitment.
-  const calculation = document.createElement('p');
-  calculation.className = 'alert alert-secondary mt-2';
-  calculation.id = 'planning-estimate';
-  calculation.setAttribute('aria-live', 'polite');
-  quantity.insertAdjacentElement('afterend', calculation);
-
-  function calculateEffort(option, count) {
-    const units = option.category === 'supplies' ? count : 1;
-    return option.effort * units;
-  }
-
-  function updateEstimate() {
-    const chosen = helpOptions.find(function (option) { return option.category === supportType.value; });
-    const count = quantity.value === '' ? 1 : Number(quantity.value);
-    if (chosen === undefined) {
-      calculation.textContent = 'Choose a support type to see a planning estimate.';
-      return;
-    }
-    if (!Number.isInteger(count) || count < 1 || count > 20) {
-      calculation.textContent = 'Enter a whole number from 1 to 20 for supply packages.';
-      return;
-    }
-    calculation.textContent = 'Planning estimate: ' + calculateEffort(chosen, count) +
-      ' effort point(s). This is a planning aid, not a price or a confirmed arrangement.';
-  }
-  supportType.addEventListener('change', updateEstimate);
-  quantity.addEventListener('input', updateEstimate);
-  updateEstimate();
-
-  function clearFieldError(field) {
-    field.classList.remove('has-error');
-    field.classList.remove('is-success');
-    const wrapper = field.closest('.mb-3, .mb-0');
-    if (wrapper) {
-      const oldError = wrapper.querySelector('.field-error');
-      if (oldError) oldError.remove();
-    }
-    field.removeAttribute('aria-invalid');
-  }
-
-  function showFieldError(field, message) {
-    clearFieldError(field);
-    field.classList.add('has-error');
-    field.setAttribute('aria-invalid', 'true');
-    const error = document.createElement('p');
-    error.className = 'small text-danger mt-1 mb-0 field-error';
-    error.textContent = message;
-    const wrapper = field.closest('.mb-3, .mb-0') || field.parentElement;
-    wrapper.appendChild(error);
-  }
-
-  function validateField(field) {
-    clearFieldError(field);
-    const value = field.value.trim();
-    if (field.id === 'full-name' && value.length < 2) {
-      showFieldError(field, 'Enter your name (at least 2 characters).');
-      return false;
-    }
-    if (field.id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      showFieldError(field, 'Enter a valid email address, for example name@example.com.');
-      return false;
-    }
-    if (field.id === 'help-type' && value === '') {
-      showFieldError(field, 'Choose the main type of support.');
-      return false;
-    }
-    if (field.id === 'quantity' && value !== '' &&
-        (!Number.isInteger(Number(value)) || Number(value) < 1 || Number(value) > 20)) {
-      showFieldError(field, 'Use a whole number from 1 to 20.');
-      return false;
-    }
-    if (field.id === 'visit-date' && value !== '') {
-      const today = new Date();
-      const localToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      const chosenDate = new Date(value + 'T00:00:00');
-      if (Number.isNaN(chosenDate.getTime()) || chosenDate < localToday) {
-        showFieldError(field, 'Choose today or a future date.');
-        return false;
-      }
-    }
-    if (field.id === 'phone' && contactPhone.checked && value.replace(/\D/g, '').length < 7) {
-      showFieldError(field, 'A phone contact method requires a valid phone number.');
-      return false;
-    }
-    field.classList.add('is-success');
-    return true;
-  }
-
-  const fieldsToValidate = [
-    document.querySelector('#full-name'), document.querySelector('#email'),
-    supportType, quantity, visitDate, phone
-  ].filter(Boolean);
-
-  fieldsToValidate.forEach(function (field) {
-    field.addEventListener('input', function () { validateField(field); });
-    field.addEventListener('change', function () { validateField(field); });
-  });
-  [contactPhone, contactEmail].filter(Boolean).forEach(function (radio) {
-    radio.addEventListener('change', function () {
-      validateField(phone);
-      const oldContactError = form.querySelector('.contact-method-error');
-      if (oldContactError) oldContactError.remove();
-    });
-  });
-
-  form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    fieldsToValidate.forEach(clearFieldError);
-    let firstInvalid = null;
-    let valid = true;
-    fieldsToValidate.forEach(function (field) {
-      if (!validateField(field)) {
-        valid = false;
-        if (firstInvalid === null) firstInvalid = field;
-      }
-    });
-
-    const chosenContact = form.querySelector('input[name="contact-method"]:checked');
-    const contactFieldset = contactPhone ? contactPhone.closest('fieldset') : null;
-    const oldContactError = form.querySelector('.contact-method-error');
-    if (oldContactError) oldContactError.remove();
-    if (!chosenContact) {
-      valid = false;
-      const error = document.createElement('p');
-      error.className = 'small text-danger contact-method-error';
-      error.textContent = 'Choose email or phone as your preferred contact method.';
-      if (contactFieldset) contactFieldset.appendChild(error);
-      if (firstInvalid === null) firstInvalid = contactPhone;
-    }
-
-    if (contactPhone.checked && phone.value.trim() === '') {
-      valid = false;
-      showFieldError(phone, 'Enter a phone number or choose email contact.');
-      if (firstInvalid === null) firstInvalid = phone;
-    }
-
-    if (!valid) {
-      result.className = 'form-result alert alert-danger';
-      result.textContent = 'Please correct the highlighted fields. No request was sent.';
-      if (firstInvalid) firstInvalid.focus();
-      return;
-    }
-
-    const chosen = helpOptions.find(function (option) { return option.category === supportType.value; });
-    const reference = 'DEMO-' + Math.floor(100000 + Math.random() * 900000);
-    const summary = [
-      'Demonstration request prepared — reference ' + reference + '.',
-      'Name: ' + document.querySelector('#full-name').value.trim(),
-      'Email: ' + document.querySelector('#email').value.trim(),
-      'Support: ' + (chosen ? chosen.title : supportType.value),
-      'Preferred contact: ' + chosenContact.value,
-      'Supply packages: ' + (quantity.value === '' ? 'not specified' : quantity.value),
-      'Preferred visit date: ' + (visitDate.value || 'not specified'),
-      'Planning effort: ' + (chosen ? calculateEffort(chosen, quantity.value === '' ? 1 : Number(quantity.value)) : 0) + ' point(s).',
-      'This is only a front-end demonstration. No data was sent to a server and no real booking, payment or order was created.'
+window.iamAliveReady.then(function ($) {
+  if (!$) return;
+  $(function () {
+    const $form = $('#support-request-form'); // id selector
+    if (!$form.length) return;
+    const $section = $('#support-form');
+    const $result = $('#form-result');
+    const options = [
+      { id: 1, title: 'Volunteer', category: 'volunteer', description: 'Give time to everyday shelter needs.', effort: 2, unit: 'visit' },
+      { id: 2, title: 'Donate Supplies', category: 'supplies', description: 'Provide food, blankets and household supplies.', effort: 1, unit: 'package' },
+      { id: 3, title: 'Support Adoption', category: 'adoption', description: 'Learn about responsible lifelong animal care.', effort: 3, unit: 'step' },
+      { id: 4, title: 'Share Our Mission', category: 'other', description: 'Share reliable shelter information.', effort: 1, unit: 'share' },
+      { id: 5, title: 'Help with Transport', category: 'volunteer', description: 'Ask whether transport help is currently needed.', effort: 2, unit: 'trip' },
+      { id: 6, title: 'Prepare Supplies', category: 'supplies', description: 'Sort useful supplies before a visit.', effort: 2, unit: 'package' }
     ];
-    result.className = 'form-result alert alert-success';
-    result.replaceChildren();
-    summary.forEach(function (line) {
-      const paragraph = document.createElement('p');
-      paragraph.className = 'mb-1';
-      paragraph.textContent = line;
-      result.appendChild(paragraph);
-    });
-    result.focus();
-  });
+    function element(tag, classes, text) {
+      return $('<' + tag + '>').addClass(classes || '').text(text || '');
+    }
+    function button(text, classes) { return element('button', classes, text).attr('type', 'button'); }
+    function select(id, title, choices, $parent) {
+      const $wrap = element('div', 'col-12 col-md-4').appendTo($parent);
+      element('label', 'form-label', title).attr('for', id).appendTo($wrap);
+      const $select = element('select', 'form-select').attr('id', id).appendTo($wrap);
+      choices.forEach(function (choice) { element('option', '', choice[1]).val(choice[0]).appendTo($select); });
+      return $select;
+    }
 
-  form.addEventListener('reset', function () {
-    window.setTimeout(function () {
-      fieldsToValidate.forEach(clearFieldError);
-      const oldContactError = form.querySelector('.contact-method-error');
-      if (oldContactError) oldContactError.remove();
-      result.className = 'form-result alert alert-info';
-      result.textContent = 'Form cleared. Complete the fields to prepare a demonstration request. No data is sent to a server.';
-      const feedback = chooser.querySelector('.selection-feedback');
-      if (feedback) feedback.remove();
-      cards.querySelectorAll('.card').forEach(function (card) { card.classList.remove('is-selected'); });
+    $section.children('p').first().text('Prepare a local demonstration request. Nothing is sent to the shelter; contact them directly for real arrangements.');
+    $('#submit-support-request').text('Prepare demo request');
+    $result.empty().addClass('is-hidden').attr({ tabindex: '-1', 'aria-live': 'polite' });
+    // Preserve required/type/min/max. novalidate lets submit run all field checks,
+    // using native ValidityState as well as jQuery rules, instead of one browser bubble.
+    $form.prop('noValidate', true);
+    const $chooser = element('section', 'border rounded-3 p-3 mb-4').attr('aria-labelledby', 'support-choices-title').insertBefore($form);
+    element('h3', 'h5 fw-bold', 'Explore ways to help').attr('id', 'support-choices-title').appendTo($chooser);
+    const $toggle = button('Hide filters', 'btn btn-outline-secondary mb-3')
+      .attr({ 'aria-controls': 'support-filters', 'aria-expanded': 'true' }).appendTo($chooser);
+    const $controls = element('div', 'row g-3 mb-3').attr('id', 'support-filters').appendTo($chooser);
+    const $searchWrap = element('div', 'col-12 col-md-4').appendTo($controls);
+    element('label', 'form-label', 'Search support options').attr('for', 'support-search').appendTo($searchWrap);
+    const $search = element('input', 'form-control').attr({ id: 'support-search', type: 'search', placeholder: 'Search options' }).appendTo($searchWrap);
+    const $category = select('support-category', 'Category', [['all', 'All categories'], ['volunteer', 'Volunteer'], ['supplies', 'Supplies'], ['adoption', 'Adoption'], ['other', 'Other support']], $controls);
+    const $sort = select('support-sort', 'Sort by', [['default', 'Recommended'], ['effort', 'Planning effort'], ['title', 'Name A–Z']], $controls);
+    const $count = element('p', 'small text-muted mb-2').attr({ id: 'support-result-count', 'aria-live': 'polite' }).appendTo($chooser);
+    const $list = element('div', 'row g-3').attr('id', 'support-option-list').appendTo($chooser);
+    const $empty = element('p', 'alert alert-info is-hidden', 'No support options match your filters.').attr('role', 'status').appendTo($chooser);
+    const $reset = button('Reset filters', 'btn btn-outline-secondary mt-3').appendTo($chooser);
+    const $feedback = element('p', 'small text-success mt-2 mb-0 is-hidden').attr({ id: 'selection-feedback', role: 'status' }).appendTo($chooser);
+    let selectedId = null;
+
+    // Rewrite 2: .empty(), .appendTo(), .val() and .text() replace replaceChildren,
+    // appendChild, .value and textContent. The helper makes card construction shorter.
+    function renderOptions() {
+      const phrase = $search.val().trim().toLowerCase();
+      let visible = options.filter(function (option) {
+        return (option.title + ' ' + option.description).toLowerCase().includes(phrase) &&
+          ($category.val() === 'all' || option.category === $category.val());
+      });
+      if ($sort.val() === 'effort') visible.sort(function (a, b) { return a.effort - b.effort; });
+      if ($sort.val() === 'title') visible.sort(function (a, b) { return a.title.localeCompare(b.title); });
+      $list.empty();
+      visible.forEach(function (option) {
+        const $column = element('div', 'col-12 col-md-6 col-lg-4').appendTo($list);
+        const $card = element('article', 'card h-100').attr('data-option-id', option.id)
+          .toggleClass('is-selected', selectedId === option.id).appendTo($column);
+        const $body = element('div', 'card-body d-flex flex-column').appendTo($card);
+        element('h4', 'h5 card-title', option.title).appendTo($body);
+        element('p', 'card-text', option.description).appendTo($body);
+        element('p', 'small text-muted mt-auto', 'Planning effort: ' + option.effort + ' per ' + option.unit).appendTo($body);
+        button('Choose this option', 'btn btn-success').attr('data-choose', option.id).appendTo($body);
+      });
+      $count.text(visible.length + ' of ' + options.length + ' support options shown.');
+      $empty.toggleClass('is-hidden', visible.length !== 0);
+    }
+    // The parent exists now and survives .empty(). Direct binding to future buttons
+    // would miss buttons created after filtering; click bubbles to this stable parent.
+    $list.on('click', '[data-choose]', function () {
+      const $card = $(this).closest('.card'); // $(this): the clicked dynamic button
+      selectedId = Number($card.attr('data-option-id'));
+      const option = options.find(function (item) { return item.id === selectedId; });
+      $list.find('.card').removeClass('is-selected');
+      $card.addClass('is-selected');
+      $('#help-type').val(option.category).trigger('change');
+      $feedback.stop(true, true).addClass('is-hidden').removeAttr('style')
+        .text(option.title + ' selected. Complete the form below.').removeClass('is-hidden').hide().fadeIn(180);
+    });
+    $search.on('input', renderOptions);
+    $category.add($sort).on('change', renderOptions);
+    $reset.on('click', function () {
+      $search.val(''); $category.val('all'); $sort.val('default');
+      renderOptions(); $search.trigger('focus');
+    });
+    $toggle.on('click', function () {
+      const $button = $(this); // second handler using $(this)
+      const expanded = $button.attr('aria-expanded') === 'true';
+      $button.attr('aria-expanded', String(!expanded)).text(expanded ? 'Show filters' : 'Hide filters');
+      // Finish the previous effect before changing state, so fast clicks stay in sync.
+      $controls.stop(true, true).slideToggle(200, function () {
+        if (!expanded) $search.trigger('focus'); // callback after the panel opens
+      });
+    });
+    renderOptions();
+
+    const $estimate = element('p', 'alert alert-secondary mt-2').attr({ id: 'planning-estimate', 'aria-live': 'polite' }).insertAfter('#quantity');
+    function chosenOption() {
+      return options.find(function (option) { return option.id === selectedId && option.category === $('#help-type').val(); }) ||
+        options.find(function (option) { return option.category === $('#help-type').val(); });
+    }
+    function effort(option) { return option.effort * (option.category === 'supplies' ? Number($('#quantity').val() || 1) : 1); }
+    function updateEstimate() {
+      const option = chosenOption();
+      const count = Number($('#quantity').val() || 1);
+      $estimate.text(!option ? 'Choose a support type for a planning estimate.' :
+        (!Number.isInteger(count) || count < 1 || count > 20 ? 'Enter a whole number from 1 to 20.' :
+          'Planning estimate: ' + effort(option) + ' effort point(s). This is not a price or confirmed arrangement.'));
+    }
+    $('#help-type').on('change', function () {
+      if (!options.some(function (option) { return option.id === selectedId && option.category === $('#help-type').val(); })) {
+        selectedId = null; $list.find('.card').removeClass('is-selected'); $feedback.addClass('is-hidden');
+      }
       updateEstimate();
-    }, 0);
+    });
+    $('#quantity').on('input change', updateEstimate);
+    updateEstimate();
+
+    // .html() copies only trusted markup already in the page, preserving its span.
+    // All visitor values and errors use .text(), so typed markup is never executed.
+    const $agreementNote = element('p', 'small text-success mt-2 is-hidden').attr({ id: 'agreement-note', role: 'status' })
+      .insertAfter($('#volunteer-agreement').parent());
+    $('#volunteer-agreement').on('change', function () {
+      const $checkbox = $(this);
+      // .prop('checked') reads the LIVE boolean; .attr('checked') is the initial
+      // markup attribute and does not reliably track a visitor's toggles.
+      if ($checkbox.prop('checked')) {
+        $agreementNote.html($checkbox.siblings('label').html()).removeClass('is-hidden');
+      } else { $agreementNote.addClass('is-hidden').empty(); }
+    });
+
+    // Rewrite 3: .find(), .each(), .val(), .closest() and class methods replace
+    // querySelectorAll/forEach/.value/classList. Rules are similar length; error DOM is clearer.
+    const $fields = $form.find('input:not([type="hidden"]):not([name="_honey"]), select, textarea');
+    const touched = new Set();
+    function errorId($field) { return $field.attr('id') + '-error'; }
+    function clearError($field) {
+      const id = errorId($field);
+      $('#' + id).remove();
+      const described = ($field.attr('aria-describedby') || '').split(/\s+/).filter(function (value) { return value && value !== id; });
+      $field.removeClass('has-error is-success').removeAttr('aria-invalid');
+      if (described.length) $field.attr('aria-describedby', described.join(' '));
+      else $field.removeAttr('aria-describedby');
+    }
+    function showError($field, message) {
+      const id = errorId($field);
+      $field.addClass('has-error').attr({ 'aria-invalid': 'true', 'aria-describedby': (($field.attr('aria-describedby') || '') + ' ' + id).trim() });
+      element('p', 'small text-danger mt-1 mb-0', message).attr({ id: id, role: 'alert' }).appendTo($field.parent());
+    }
+    function validationMessage($field) {
+      const id = $field.attr('id');
+      if ($field.attr('type') === 'radio') {
+        return $form.find('input[name="contact-method"]:checked').length ? '' : 'Choose email or phone contact.';
+      }
+      if ($field.attr('type') === 'checkbox') return ''; // optional acknowledgement
+      const value = String($field.val() || '').trim();
+      // Do not trim date/time/number by assignment: their browser properties are typed.
+      if (['text', 'email', 'tel'].includes($field.attr('type')) || $field.is('textarea')) $field.val(value);
+      if ($field.prop('required') && !value) return 'Please complete this field.';
+      if (id === 'full-name' && value.length < 2) return 'Enter at least 2 characters for your name.';
+      if (id === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Enter an email such as name@example.com.';
+      if (id === 'phone') {
+        if ($('#contact-phone').prop('checked') && !value) return 'Enter a phone number for phone contact.';
+        if (value && (!/^\+?[\d\s().-]+$/.test(value) || !/^[0-9]{7,15}$/.test(value.replace(/\D/g, '')))) return 'Use 7–15 digits, with an optional leading +, spaces, brackets or hyphens.';
+      }
+      if (id === 'help-type' && !options.some(function (option) { return option.category === value; })) return 'Choose a listed support type.';
+      if (id === 'quantity' && value && (!Number.isInteger(Number(value)) || Number(value) < 1 || Number(value) > 20)) return 'Enter a whole number from 1 to 20.';
+      if (id === 'visit-date' && value) {
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const date = new Date(value + 'T00:00:00');
+        if (Number.isNaN(date.getTime()) || date < today) return 'Choose today or a future date.';
+      }
+      // Include optional time/message and browser-specific malformed values.
+      if (!$field.prop('validity').valid) return 'Check the format or allowed range of this field.';
+      return '';
+    }
+    function validate($field) {
+      clearError($field);
+      const message = validationMessage($field);
+      if (message) { showError($field, message); return false; }
+      $field.addClass('is-success'); return true;
+    }
+    function hideOldSuccess() {
+      if ($result.hasClass('alert-success') && !$result.hasClass('is-hidden')) {
+        // fadeOut removes an outdated success when the visitor starts a new request.
+        $result.stop(true, true).fadeOut(150, function () { $result.addClass('is-hidden').empty().removeAttr('style'); });
+      }
+    }
+    $fields.on('input change', function () {
+      const $field = $(this);
+      hideOldSuccess();
+      if (touched.has($field.attr('id'))) validate($field);
+      if ($field.is('[name="contact-method"]')) {
+        $fields.filter('[name="contact-method"]').each(function () {
+          if (touched.has($(this).attr('id'))) validate($(this));
+        });
+        if (touched.has('phone')) validate($('#phone'));
+      }
+    });
+    let keepSuccess = false;
+    function clearFormState() {
+      $fields.each(function () { clearError($(this)); }); touched.clear();
+      selectedId = null; $list.find('.card').removeClass('is-selected');
+      $feedback.add($agreementNote).addClass('is-hidden').empty();
+      updateEstimate();
+    }
+    $form.on('reset', function (event) {
+      // Cancel native reset so values and errors can be reset synchronously in jQuery.
+      event.preventDefault();
+      $fields.each(function () {
+        const $field = $(this);
+        if ($field.is('[type="radio"], [type="checkbox"]')) $field.prop('checked', $field.prop('defaultChecked'));
+        else if ($field.is('select')) $field.val('');
+        else $field.val($field.prop('defaultValue'));
+      });
+      clearFormState();
+      if (!keepSuccess) $result.stop(true, true).addClass('is-hidden').empty().removeAttr('style');
+    });
+    $form.on('submit', function (event) {
+      // Without preventDefault the POST action would send personal data to FormSubmit
+      // and navigate away. This assignment only prepares a local demonstration.
+      event.preventDefault();
+      $result.stop(true, true).addClass('is-hidden').empty().removeAttr('style');
+      let $firstInvalid = null;
+      // No short circuit: EVERY visible user-editable field is checked.
+      $fields.each(function () {
+        const $field = $(this); touched.add($field.attr('id'));
+        if (!validate($field) && !$firstInvalid) $firstInvalid = $field;
+      });
+      if ($firstInvalid) { $firstInvalid.trigger('focus'); return; }
+      // Browser validation improves feedback; users can bypass it. A real backend
+      // must repeat all checks before accepting or storing any submitted data.
+      const option = chosenOption();
+      const summary = 'Demo request prepared for ' + $('#full-name').val() + ': ' + option.title +
+        ', contact by ' + $form.find('[name="contact-method"]:checked').val() +
+        ', planning effort ' + effort(option) + '. No data was sent. Contact the shelter directly.';
+      keepSuccess = true; $form.trigger('reset'); keepSuccess = false;
+      // Chain: remove old severity, add success styling, insert SAFE text, reveal,
+      // then fade in. The callback focuses the completed confirmation for readers.
+      $result.removeClass('alert-info alert-danger').addClass('alert-success').text(summary)
+        .removeClass('is-hidden').hide().fadeIn(220, function () { $result.trigger('focus'); });
+    });
   });
 });

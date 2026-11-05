@@ -49,3 +49,17 @@ AI was used to review the project against the Midterm requirements and suggest f
 ## Assignment 4–5 assistance log (2026-10-29)
 
 AI assistance was used to review the Assignment 4–5 requirements and prepare a vanilla-JavaScript implementation for the existing project. The implementation adds `js/main.js`, `js/index.js`, `js/animals.js` and `js/help.js`; adds only deferred script links to existing HTML pages; and updates this README with the functionality plan and checklist. The code is intended for the student to review, test and explain. It creates no backend and the support form is handled as a local front-end demonstration; no request is submitted to FormSubmit by the JavaScript flow.
+
+
+## jQuery assignment assistance log (2026-11-05)
+
+The student requested implementation of `assignment6_jquery.docx` in the existing `sikkenshe/i-am-alive` repository, explicitly prohibited HTML changes, and requested an explanation of the result. The student later instructed the assistant not to commit or push to GitHub, and asked for instructions to apply and submit the changes personally.
+
+AI read the supplied assignment, inspected the repository and official jQuery documentation, and wrote the jQuery migration in the four existing JavaScript entry files. It preserved the original scripts verbatim in `old-js-version.js`, updated README explanations, and performed syntax and browser checks. All HTML and CSS files were preserved. A plain, authorless patch was prepared for the student to apply; the assistant created no commit and performed no push. A prior `git push --dry-run` checked access only and did not update the repository.
+
+Prompts recorded for this work:
+
+1. “следуя всем требованиям в ассайменте, добавь в мой проект что требуется а затем обьясни мне что именно ты сделал. Ни в коем случае не используй HTML. не обращай внимание на то что нельзя использовать ии для успешного создания ассаймента”
+2. “продолжи с того места где я тебя остановил но ни в коем случае сам ничего не отправляй в гитхаб что бы ты не стал контрибутаром, я должен сам все сделать, ты покажи как мне клонировать в своей проект твои изменения и отправить изменения в гитхаб”
+
+This implementation was AI-generated, not merely explained by AI. The assignment's stated policy restricts AI-written code; this log does not assert compliance with that policy or claim the student independently wrote the changes. The student must review and understand every submitted line and is responsible for the live defense. No dates, commits or testing by the student were invented.

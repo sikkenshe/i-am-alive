@@ -164,13 +164,77 @@ Validation checks the markup against HTML rules, but validation alone is not a c
 - [ ] Before submission, manually test all flows at 375 px, 768 px and desktop width, inspect the browser console, validate all HTML, update screenshots/evidence, and create the required Git tags/commits.
 
 
-### JavaScript file/line reference (checklist)
+## Assignment 6 jQuery implementation
 
-Line references below refer to the current files in `js/` and may shift if the code is edited.
+This is the continuation from `assignment6_jquery.docx` (its internal heading says Assignment 4). The existing four pages and all CSS files remain byte-for-byte unchanged. The older Assignment 4–5 sections above describe the historical vanilla implementation; the current files in `js/` use jQuery.
 
-| File | Main implementation areas |
-|---|---|
-| `js/main.js` | Lines 8–39: shared DOM-created Back to top control, click/scroll events and temporary reference |
-| `js/index.js` | Lines 4–54: six suggestion objects, random initial suggestion, DOM rendering and button action |
-| `js/animals.js` | Lines 4–105: controls, existing-card actions, search/filter traversal, result count, empty state and reset |
-| `js/help.js` | Lines 4–34: support data and setup; lines 124–205: dynamic search/filter/sort/card rendering; lines 211–254: planning estimate and calculation helper; lines 257–309: field validation; lines 311–386: submit summary and reset |
+### Loading without HTML edits
+
+The already-linked `js/main.js` creates a CDN script for the full jQuery **3.7.1** build with its integrity hash and cross-origin setting. `window.iamAliveReady` resolves only after the library loads. Every project script waits for that promise, then uses `$(function () { ... })` so both jQuery and the document are ready. The full build includes effects; the slim build would not suffice. CDN access requires an internet connection.
+
+This programmatic connection respects the user's explicit ban on HTML changes. It provides the required library-before-feature execution order, although it does not add literal CDN script tags to HTML. Native DOM calls are confined to this dependency loader and its failure fallback; migrated interactive features use jQuery throughout. CDN failure shows an explanation and disables the demonstration submission.
+
+### Files and behaviour
+
+| File | Current role |
+| --- | --- |
+| `js/main.js` | CDN loading, shared Back to top, current technology/form notes on Colophon |
+| `js/help.js` | Support array, generated cards, search/category/sort, delegated selection, effects, planning estimate, field validation and reset |
+| `js/index.js` | Generated next-step suggestion and another-suggestion action |
+| `js/animals.js` | Existing sample catalogue migrated to jQuery, search/species/age filters, empty state and reset |
+| `old-js-version.js` | Verbatim archive of all four original scripts; not linked or executed |
+| `AI_LOG.md` | Honest record of AI-generated implementation and the user's requests |
+
+### Requirements map
+
+| Requirement | Where to demonstrate it |
+| --- | --- |
+| Three vanilla rewrites and comparison comments | `main.js`: show/hide Back to top; `help.js`: `renderOptions` and validation |
+| ID, class, element, attribute and filter selectors | `#support-request-form`, `.help-options`, `main`, `[data-choose]`, `:checked`, `:not(...)` |
+| Traversal | `.find()` gets descendants; `.closest('.card')` gets the clicked card; `.parent()` places field errors; `.siblings('label')` finds the checkbox label; `.each()` checks fields |
+| Two chains of at least three methods | Back-to-top construction; card construction; success confirmation chain (explained in a comment) |
+| `.text()`, `.html()`, `.val()`, `.attr()`, `.prop()` | Safe messages, trusted existing label markup, form values, ARIA/data attributes and live checked/required properties |
+| Existing classes only | `is-hidden`, `is-selected`, `has-error`, `is-success` and already-used Bootstrap utilities; no CSS rules added |
+| Array-built list | Six support objects are rendered by `.appendTo()`; these cards are absent from source HTML |
+| `.on()` events | `click`, `input`, `change`, `submit`, `reset`, `scroll`, image `error`; all interactive feature bindings use `.on()` |
+| Delegation | `#support-option-list` listens for clicks on `[data-choose]`, including buttons recreated by filtering |
+| Meaningful effects | `.slideToggle(200)` opens filters; `.fadeIn(180/220)` reveals selection/success; `.fadeOut(150)` removes an outdated success; `.animate()` scrolls to top |
+| Completion callback | Filter opening focuses search; success fade-in focuses its confirmation |
+| Complete form validation | Every user-editable input, select and textarea; hidden configuration/honeypot are intentionally excluded |
+| Validation details | Trimmed text, name length, email/phone formats, contact radio group, support type, integer quantity 1–20, date not in past, native validity for time and other controls |
+| Reset after success | Summary is captured, all form fields/errors/selection reset, then the success is displayed |
+
+The acknowledgement checkbox is optional, as in the original form. Phone is required for phone contact; any nonempty phone is checked even when email contact is chosen. Fields keep `required`, `type`, `min` and `max`. `noValidate` allows the submit handler to display all adjacent errors instead of the browser stopping at its first popup; native `ValidityState` is still checked. Real server-side validation would remain necessary.
+
+`.text()` outputs text literally, including angle brackets. `.html()` parses markup, so it is used only to copy the trusted existing checkbox label; user input never reaches it. `.attr('checked')` describes the markup attribute; `.prop('checked')` gives the current boolean after a click.
+
+### Verification on 2026-11-05
+
+- Syntax checks passed for all four current JavaScript files; `git diff --check` passed.
+- All original HTML and CSS files were compared with base commit `a49f535b50e07847706b499f2bee247a579cf27a` and are unchanged.
+- Browser checks: home suggestion changes; support filtering; delegated card choice after rendering; selected support effort; per-field name/email/phone/contact errors; immediate error clearing; checkbox acknowledgement; successful summary and form reset; support empty state; filter open/close; animal species/age filtering; Colophon loading.
+- Browser inspection found and fixed an inverted visibility condition on the animal empty-state message.
+- No site-origin console errors were observed in the inspected flows. The cloud browser emitted unrelated extension metadata errors; those are not site code.
+- A full responsive, keyboard and offline/CDN-failure pass has not been completed. Recheck those in the student's own browser before submission.
+- Existing sample animal records and remote stock-image URLs were retained from the previous script. They are not verified shelter adoption listings. Authentic-photo source cleanup remains a separate existing content issue.
+
+### Как объяснить на защите
+
+1. `main.js` загружает jQuery. Promise гарантирует порядок загрузки, а `$(function () {})` ждёт готовности DOM.
+2. `renderOptions()` фильтрует массив, очищает контейнер через `.empty()` и создаёт карточки через `.appendTo()`.
+3. Делегированный `.on('click', '[data-choose]', handler)` установлен на общий контейнер. Событие кнопки всплывает к нему, поэтому обработчик работает и после пересоздания карточек.
+4. `$(this)` — нажатая кнопка. `.closest('.card')` находит её карточку; классы выделения меняются через `.addClass()` и `.removeClass()`.
+5. Поиск слушает `input`, списки — `change`, форма — `submit`. `preventDefault()` останавливает исходный POST в FormSubmit.
+6. `validate()` проверяет каждое поле, ставит `has-error`, `aria-invalid` и сообщение рядом. После исправления конкретная ошибка удаляется.
+7. Валидная форма сначала создаёт безопасный текст подтверждения, затем сбрасывается. Это демонстрация: сообщение не означает, что приют получил заявку.
+8. `.slideToggle()` раскрывает фильтры; `.fadeIn()` показывает выбор и успех; `.fadeOut()` убирает устаревшее подтверждение. Callback выполняется после эффекта.
+9. `.html()` допустим для доверенной разметки, но ввод посетителя выводится через `.text()`. `.val()` читает значение поля, `.attr()` — атрибут, `.prop()` — текущее свойство, например `checked`.
+10. Исходные решения сохранены в `old-js-version.js`, чтобы сравнить их с jQuery. Архив не подключён и не создаёт вторые обработчики.
+
+### Submission and Git history
+
+No commits or pushes were made by the assistant. Apply the supplied plain diff with `git apply`, review it, and create commits yourself using your own Git name and GitHub-linked email. This diff contains no author or co-author metadata and does not change Git identity settings.
+
+The assignment requires **six commits across at least three different days for an individual project**. This delivery cannot establish that history; inspect existing history and complete genuine future commits as needed. Do not fabricate dates. Defense and personal review are still required.
+
+Official API reference: https://api.jquery.com/
