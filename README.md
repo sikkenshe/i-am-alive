@@ -1,240 +1,164 @@
-# I Am Alive — Animal Shelter Website
+# I Am Alive — Endterm continuation
 
-An individual HTML5 coursework project about the **I Am Alive / Я живой** animal shelter in Astana, Kazakhstan.
+An individual Introduction to Web Technologies project about I Am Alive / Я живой in Astana. Visitors can read published shelter information, prepare questions, choose a way to help and download a personal support plan. The planner does not send messages, book visits or manage adoption applications.
 
-## Project purpose
+Project owner and student: Bekkazy Bekarys. Implementation assistance for the changes below was provided by AI; see the full, retained history in `AI_LOG.md`. The student must review, test and explain the submitted code. This README does not claim that AI-written code complies with the course AI policy.
 
-The website presents publicly available information about the shelter, animals, responsible adoption, ways to help, contact information and a simple educational support form.
+## Run the project
 
-This is an academic project and is **not the official website of the shelter**.
+Open `index.html` in a current browser, or open the folder in VS Code and use Live Server. An internet connection is needed for the existing Bootstrap CDN assets and for jQuery on `help.html`. There is no build step, server or database to install. No npm dependencies are added to this repository.
 
-## Technologies
+## Frozen files
 
-- HTML5
-- Bootstrap 5.3.8 via CDN
-- Bootstrap responsive grid, utilities, buttons, cards and navbar
-- Small custom CSS correction layer
-- Semantic HTML, forms and tables
-- Bootstrap JavaScript bundle only for Bootstrap components
-- Vanilla JavaScript in `js/` (no jQuery or other JavaScript framework)
-- No project-owned backend/database
-- FormSubmit external service is used for support-request email delivery after its recipient address is configured
+All four HTML files and both project CSS files are byte-for-byte unchanged from repository HEAD `15965badc8d46acf6b071b9446944637bf089188` during this continuation. New content is created by scripts. Visual states use existing project classes and Bootstrap classes; jQuery effects manage their own temporary inline presentation.
 
-## Project structure
+There is no `midterm` tag in the fetched repository. The commit titled “Prepare project for Midterm” is `83c24ba`. This continuation does not silently create a retrospective tag or rewrite history. Older commits already changed HTML after that commit, including removal of the Colophon navigation item and addition of script links. The current `main.js` restores the missing navigation entry at runtime. The previous HTML changes remain visible in Git history; this continuation does not claim to erase them.
 
-```text
-I-Am-Alive/
-├── index.html
-├── animals.html
-├── help.html
-├── colophon.html
-├── images/
-│   ├── dog-volunteer.jpeg
-│   ├── shelter-dog.jpeg
-│   └── dog-walk.jpeg
-├── README.md
-├── TASK_A.md
-├── TASK_B.md
-├── TAG_CHECKLIST.md
-├── BOOTSTRAP_CHANGES.md
-├── screenshots/
-└── AI_LOG.md
+## Current files and ownership of features
+
+| File | Implementation | Responsibility |
+| --- | --- | --- |
+| `js/main.js` | Plain JavaScript | Back to top, active navigation, restored Colophon link, source/technology notes, Bootstrap-menu fallback; jQuery dependency loading and a submission guard during loading |
+| `js/index.js` | Plain JavaScript | Rotating support suggestions with preparation steps |
+| `js/animals.js` | Plain JavaScript | Source-backed care/support topics, live search/category filter, result count, empty state and removable question shortlist |
+| `js/help.js` | jQuery | Support search/category/sort, delegated selection, filter effects, conditional quantity field, full validation, final plan and downloadable text |
+| `css/base.css`, `css/bekarys.css` | Existing CSS | Frozen appearance and state classes |
+| `old-js-version.js`, `js_for_iamalive/help.js` | Historical, disconnected | Older coursework implementations; not loaded by any HTML page |
+
+No catalogue or suggestion handler waits for jQuery. `main.js` loads the full jQuery 3.7.1 build only when the support form exists. `iamAliveReady` resolves after dependency loading; `help.js` then uses `$(function () { ... })` for DOM readiness. Native loader code only protects the external legacy form action during startup/failure; it does not implement the planner's business rules. Blob/URL are browser file APIs used by the jQuery planner to offer a download.
+
+## What changed since the previous defended version
+
+Baseline: the jQuery migration in `15965ba`, 5 November 2026. Previous filters and validation alone are not being presented as new endterm functionality.
+
+| Feature before this continuation | New or corrected behaviour |
+| --- | --- |
+| All interactions migrated to jQuery | Native shared, home and catalogue features now run independently; jQuery owns the planner in a separate file |
+| Random one-line help suggestion | Each home suggestion now gives three preparation steps and a complete next action |
+| Sample animal names, ages and remote stock pictures | Replaced with six published help/adoption topics; no invented animal identity, availability or stock-image requests |
+| Filtering with no preparation output | Visitors can add questions, combine them across filters, remove individual questions, clear the list and continue to shelter contacts |
+| Arbitrary “effort points” | Removed; the only supply quantity is the visitor's actual package count, required only for supply plans |
+| Brief local success message | A full personal plan includes all submitted fields, an explicit local-only result and an optional text-file download |
+| Generic phone label | Phone becomes visibly required when phone contact is chosen; optional otherwise, but any supplied number is checked |
+| jQuery failure could leave stale form wording | Startup neutralises the legacy external action immediately; failure keeps submission disabled and explains the alternative |
+| Missing Colophon links on three pages | Existing page restored to navigation through JavaScript |
+| Source placeholders and old technology text | Runtime Colophon content lists actual photo provenance and the current JS/jQuery split |
+
+## Endterm requirements map
+
+| Requirement | Concrete implementation |
+| --- | --- |
+| Arrays and objects near the top of a native JS file | `topics` in `animals.js`, `suggestions` in `index.js` |
+| Dynamic content built with loops | `renderTopics()` builds cards with `forEach`; `renderQuestions()` builds the selected question list |
+| Functions with parameters and return values, reused | `element(tag, classes, text)`, `normalize(value)`, `findTopic(id)` |
+| Conditions and calculated number | Filter predicates, selected states, `visible.length`, `shortlist.size` |
+| Three or more event types | Native `click`, `input`, `change`, `scroll`; jQuery also uses `submit` and `reset` |
+| Delegation | Native parent `row` handles `button[data-add]`; `questions` handles `button[data-remove]`; jQuery `$list.on('click', '[data-choose]', ...)` |
+| Event object | `event.target.closest(...)` identifies dynamic buttons; submission uses `event.preventDefault()` |
+| Field validation | `validationMessage()`, `validate()`, `showError()`, `clearError()` in `help.js` |
+| Different jQuery selectors/traversal | ID, class, attribute, element, `:checked`, `:not`; `.closest()`, `.find()`, `.siblings()`, `$(this)` |
+| Chain of three or more methods | Feedback `.stop().addClass().removeAttr().text()...`; download `.attr().appendTo()` and helper methods; result severity/text/reveal chain |
+| Two meaningful effects | `.slideToggle()` for the filter panel; `.fadeIn()` for selection/success; `.fadeOut()` invalidates an old result |
+| State classes | `.is-hidden`, `.is-selected`, `.is-active`, `.has-error`, `.is-success` |
+| Empty case | Both filters show a message; an empty question shortlist says how to begin |
+| Single visitor completes the task | Prepared questions and a downloadable personal plan; no admin, staff approval, backend or fake booking |
+
+The native helper `normalize(value)` is called for the search input and topic text. `findTopic(id)` is called when preparing questions and validating delegated actions. Creating a new element from an array means the corresponding new topic cards do not exist as handwritten HTML. The existing frozen `.row` is only the mounting point.
+
+## Validation and final result
+
+- Text is trimmed; name requires at least two characters.
+- Email must match the format check and native `ValidityState`.
+- Contact method must be selected. Phone is required for phone contact. Any entered phone must contain 7–15 digits with only permitted formatting characters.
+- Support category must be one of the actual options.
+- Supply plans require an integer package count from 1 to 20; other categories disable that field and exclude its value from the plan.
+- Optional visit date cannot be in the past. Optional time uses native validity. Message is optional and trimmed. The acknowledgement checkbox is explicitly optional.
+- All editable fields are checked, with errors adjacent to their controls. Errors clear on correction; focus moves to the first invalid field.
+- The form uses `noValidate` to let the code display all errors; this does not remove `required`, `type`, `min` or `max` constraints.
+- On success, the summary is captured before reset, fields and selection are cleared and the full result appears.
+- The download contains the submitted plan, not empty reset values. A later edit invalidates the old download and revokes its object URL.
+- All visitor values are rendered with `.text()`. `.html()` is used only to copy an existing trusted checkbox label.
+- No fetch, XHR, localStorage or database stores personal details. A downloaded plan is saved only by the visitor's download action. Server-side checks would be necessary if real submission were added.
+
+## Sources and honest limitations
+
+Published forms of help: [Sxodim shelter guide](https://sxodim.com/astana/article/4-priyuta-dlya-zhivotnyh-v-astane). The current topics refer to that published list, not a live inventory. Questions and preparation steps are visitor guidance, not claims that a service is available now.
+
+Address and displayed telephone: [Yandex Maps](https://yandex.kz/maps/ru/org/ya_zhivoy/231771024536/). The email and telephone also appear in the [Tanba public register](https://tanba.kezekte.kz/ru/reestr-tanba-public/place?p=70), organization “Частный фонд Я Живой”. Pagination can change; search the register by organization name. Published hours should be confirmed before visiting. The older Sxodim article gives another telephone, so the existing Yandex/Tanba telephone has been retained.
+
+The three local photographs come from [EGI's report about a shelter visit on 26 February 2023](https://egi.edu.kz/ru_ru/2023/02/26/poseshhenie-priyuta-dlya-zhivotnyh/). They are authentic published images, not photographs taken by the student. The current scripts do not load stock or AI-generated animal images. The course's “your own photographs” rule still requires the student's own photos or explicit instructor acceptance of attributed published photos. This JS-only change cannot establish personal photo authorship.
+
+## Verification performed on 13 November 2026
+
+- Syntax checks passed for all four active JavaScript files.
+- `git diff --check` passed.
+- All HTML/CSS bytes compared equal to `15965ba` during this continuation.
+- 76 DOM/event assertions passed in jsdom with jQuery 3.7.1: navigation, native features without jQuery, source attribution, searches, filters, counts, empty states, delegated actions after rerender, shortlist removal/reset, field errors and correction, contact-dependent phone, package validation, past/future date, successful reset, safe text output, download contents and stale-download invalidation, jQuery failure, menu fallback.
+- These are DOM/event checks, not a rendered-browser or network test. Browser launch was blocked by the execution environment. Browser layout at 375/768/1366 px, real CDN/SRI behaviour, the actual file-download click, W3C validation and testing on another physical device remain manual checks. Historical screenshots are not new endterm evidence.
+
+See `QUALITY_PASS.md` for the remaining quality gate. Do not mark unchecked items as tested.
+
+## Git and submission
+
+The fetched repository contains 11 existing commits over several dates. After the identified Midterm preparation commit there are 3 commits across 29 October and 5 November. No tags were returned by `git tag --list`. Whether earlier coursework commits count towards the individual endterm requirement must be interpreted with the instructor; do not fabricate dates or split changes into artificial commits to imply work over three days.
+
+The assistant has not committed, pushed, tagged or changed Git identity. Apply the authorless patch, review and test it, then make your own commit. Use the same repository.
+
+PowerShell, if the patch is saved in Downloads and you want a fresh local copy:
+
+```powershell
+cd "$env:USERPROFILE\Downloads"
+git clone https://github.com/sikkenshe/i-am-alive.git i-am-alive-endterm
+cd i-am-alive-endterm
+git apply --check ..\i-am-alive-endterm.patch
+git apply ..\i-am-alive-endterm.patch
+git diff --stat
+git diff -- '*.html' '*.css'
+Start-Process .\index.html
 ```
 
-## Pages
+The HTML/CSS diff must be empty. If `git apply --check` fails, stop and inspect the difference instead of forcing the patch; its exact base is `15965ba`.
 
-### `index.html`
-Home page with shelter introduction, semantic structure, photo gallery, real contact/visiting information, table, lists, definitions, quotation, HTML demonstrations, and links.
+After reviewing the files and completing your available checks:
 
-### `animals.html`
-Information about animals, care, adoption preparation and a real published adoption story.
-
-### `help.html`
-Ways to help, useful supplies, volunteering information and the educational HTML form.
-
-### `colophon.html`
-Project authorship, sources, technologies, image-source information, semantic structure and project limitations.
-
-## Real shelter information
-
-The project uses publicly available information about I Am Alive / Я живой in Astana.
-
-The current Yandex Maps listing identifies the shelter at **Akkorgan Street 5V, Koktal microdistrict, Astana**, with telephone **+7 (702) 481-01-58** and daily opening hours listed as **11:00–18:00**.
-
-Source:
-https://yandex.kz/maps/ru/org/ya_zhivoy/231771024536/
-
-Additional shelter information:
-https://sxodim.com/astana/article/4-priyuta-dlya-zhivotnyh-v-astane
-
-The Jack adoption story:
-https://sxodim.com/astana/article/davay-pomozhem-istoriya-dzheka
-
-## Image sources
-
-The three photographs used in the project were taken from a published EGI report about a visit to I Am Alive.
-
-Source:
-https://egi.edu.kz/ru_ru/2023/02/26/poseshhenie-priyuta-dlya-zhivotnyh/
-
-The image files are stored locally in the `images` folder.
-
-## External link
-
-The website includes an external Yandex Maps link with:
-
-```html
-target="_blank"
-rel="noopener noreferrer"
+```powershell
+git add js/main.js js/index.js js/animals.js js/help.js README.md AI_LOG.md QUALITY_PASS.md
+git diff --cached --stat
+git commit -m "Complete endterm visitor planning flows"
+git push origin main
 ```
 
-## Support request form
+Only after final testing and checking the course requirements:
 
-The support form is a front-end demonstration. The Assignment 4–5 JavaScript prevents normal form submission, validates the fields in the browser and displays a summary with a temporary demonstration reference. **No form data is sent to FormSubmit or another server; no real booking, payment or order is created.** The `action` attribute remains in the original HTML for minimal structural change, but JavaScript intercepts the submit event.
+```powershell
+git tag endterm
+git push origin endterm
+```
 
-## Midterm user journeys
+Do not recreate an existing `endterm` tag or overwrite history. No extra written report or recording is required by the supplied Endterm brief; the live defense is required.
 
-### Journey 1 — Learn about the shelter and its animals
+## Defense walkthrough
 
-1. Start on `index.html`.
-2. Read the shelter introduction and contact information.
-3. Use the main navigation to open `animals.html`.
-4. Read the animal information and responsible-adoption guidance.
-5. Use the contact section to find the shelter phone/email, or open `help.html` to explore ways to help.
-6. End when the visitor has found animal/adoption information and a clear next step.
+1. Home: explain the organization, rotate a suggestion and show its preparation steps.
+2. Animals: explain that topics are published information, not invented animal profiles. Search “food”, filter supplies, show an empty search, reset it, add two questions after rerender, remove one and open contacts.
+3. Help: filter and sort the support choices, choose a newly rendered card and show the form category changing. Collapse and reopen the filter panel.
+4. Submit empty fields. Correct name/email. Choose phone contact without a number. Show invalid quantity and a past date. Fix each error and explain why it disappears.
+5. Complete a supply plan. Show the real package count, full result and downloaded text. Explain the reset and that nothing was sent to the shelter.
+6. Start another plan and show that the previous result becomes invalid. Test Clear Form.
+7. Show phone layout and the responsive menu. Open all four pages and check each browser console.
 
-### Journey 2 — Prepare a support request demonstration
+Be ready to explain:
 
-1. Start on `index.html`.
-2. Open `help.html` from the main navigation.
-3. Search/filter support options and choose one.
-4. Complete the required name, email, support type and contact method fields; optionally add visit details and a message.
-5. Correct any field-level errors, then submit.
-6. Review the summary and temporary demonstration reference. No data is sent to a server and no real booking, payment or order is created.
-7. End when the visitor has reviewed the prepared request summary.
+- `filter` selects records; `forEach` builds their elements; `find` selects one object. jQuery `.find()` selects DOM descendants and is different from array `find()`.
+- A delegated parent survives when its children are rebuilt. Clicks bubble to that parent; `event.target.closest()` or the jQuery selector identifies the button.
+- `preventDefault()` keeps the form on the page. The startup guard also removes the legacy external action before jQuery loads.
+- `iamAliveReady` waits for the library; `$(function () {})` waits for DOM readiness. They solve different timing problems.
+- `.prop('checked')` is the current boolean state, not the initial markup attribute.
+- `touched` tracks fields that need immediate revalidation after a failed submit.
+- `Set` prevents duplicate prepared questions; its size is the calculated selected count.
+- `.text()` prevents typed markup from becoming elements. `.html()` is unsuitable for arbitrary visitor text.
+- The plan is captured before reset so its details are not lost. Blob/URL expose a local downloadable file; revocation releases the obsolete download.
+- A new optional field must be included in validation and in `details` if it should appear in the plan. A new topic belongs in the data array, not handwritten HTML.
+- The frozen markup still exists in View Source; the Elements panel includes the runtime content built by scripts.
 
-### Journey 3 — Find shelter contact and location
-
-1. Start on any page.
-2. Use the shared main navigation to open `help.html` or `index.html`.
-3. Find the address and telephone number.
-4. Use the telephone link to call from a compatible device, the email link to compose a message, or the Yandex Maps link to view the location.
-5. End when the visitor has a direct way to contact the shelter or find its location.
-
-## Quality pass (to complete before submission)
-
-See `QUALITY_PASS.md`. Record the date, page/device, issue found and fix. Do not mark a check complete until it has been tested in a browser or with the relevant validator. The screenshots already in `screenshots/` were captured before these Midterm changes; recapture current desktop and phone screenshots before submission.
-
-## Validation
-
-The HTML pages should be checked with the W3C HTML Checker before submission:
-
-https://validator.w3.org/nu/
-
-Validation checks the markup against HTML rules, but validation alone is not a complete quality or accessibility audit.
-
-## Academic limitations
-
-- Information about the shelter can change.
-- Current animal availability should be confirmed with the shelter.
-- The project does not represent the official shelter website.
-- Assignment 3 keeps the existing HTML content and uses Bootstrap for layout, responsiveness, navigation, buttons and components. Custom CSS is only a small correction layer.
-
-
-## Assignment 4–5 Functionality Plan
-
-| Page | Visitor goal | Planned/implemented function | Expected result | Responsible student |
-|---|---|---|---|---|
-| All pages | Navigate long pages comfortably | `js/main.js`: creates an accessible Back to top button with DOM methods and click/scroll events | Button appears after scrolling and returns the visitor to the top | Bekkazy Bekarys |
-| `index.html` | Find a practical way to help | `js/index.js`: six real-theme suggestions, one selected randomly, with a button to the support form and a button to choose another | Visitor sees a useful suggestion and can continue to the help form | Bekkazy Bekarys |
-| `animals.html` | Find relevant animal-care information | `js/animals.js`: live search, topic filter, result count, empty state, reset control and contact action on existing cards | Visitor can narrow the existing information and find a next step | Bekkazy Bekarys |
-| `help.html` | Explore and choose support | `js/help.js`: six support objects, reusable card rendering, search/category/sort controls, count, empty state, reset and selection into the form | Visitor can find and choose a relevant support type | Bekkazy Bekarys |
-| `help.html` | Estimate planning effort and submit a valid demo request | `js/help.js`: live effort calculation and field-level validation for name, email, support selection, quantity/date rules and phone/contact-method consistency | Invalid input gets specific errors and focus; valid input produces a summary and random demo reference | Bekkazy Bekarys |
-
-## Assignment 4–5 JavaScript Checklist
-
-- [x] `js/main.js`: `'use strict'`, shared DOM behaviour, `const`, function with return-independent event flow, `Math.random()`, `addEventListener()` click and scroll.
-- [x] `js/index.js`: six suggestion objects, array traversal, random featured suggestion, click event and meaningful navigation.
-- [x] `js/animals.js`: search and topic filtering, loops, conditions, DOM-created controls, result count, empty state, reset, contact actions.
-- [x] `js/help.js`: six support objects with six properties each, filtering/sorting, reusable DOM card rendering, `find`, arithmetic effort estimate, `Math.random()` demonstration reference, `submit`, `click`, `input` and `change` events.
-- [x] Validation: trimmed name, email format, required support type, quantity range/integer, no past visit date, contact method selection, phone required when phone contact is chosen; specific errors, first invalid field focus, outdated error clearing and valid summary.
-- [x] Dynamic content is created with DOM methods and visitor-entered text is output with `textContent`; user input is not inserted into `innerHTML`.
-- [x] All four HTML files load `js/main.js` with `defer`; page-specific files are loaded only where needed, also with `defer`.
-- [x] No project CSS rules were added and no page content blocks were added directly to HTML; only script links were added.
-- [ ] Before submission, manually test all flows at 375 px, 768 px and desktop width, inspect the browser console, validate all HTML, update screenshots/evidence, and create the required Git tags/commits.
-
-
-## Assignment 6 jQuery implementation
-
-This is the continuation from `assignment6_jquery.docx` (its internal heading says Assignment 4). The existing four pages and all CSS files remain byte-for-byte unchanged. The older Assignment 4–5 sections above describe the historical vanilla implementation; the current files in `js/` use jQuery.
-
-### Loading without HTML edits
-
-The already-linked `js/main.js` creates a CDN script for the full jQuery **3.7.1** build with its integrity hash and cross-origin setting. `window.iamAliveReady` resolves only after the library loads. Every project script waits for that promise, then uses `$(function () { ... })` so both jQuery and the document are ready. The full build includes effects; the slim build would not suffice. CDN access requires an internet connection.
-
-This programmatic connection respects the user's explicit ban on HTML changes. It provides the required library-before-feature execution order, although it does not add literal CDN script tags to HTML. Native DOM calls are confined to this dependency loader and its failure fallback; migrated interactive features use jQuery throughout. CDN failure shows an explanation and disables the demonstration submission.
-
-### Files and behaviour
-
-| File | Current role |
-| --- | --- |
-| `js/main.js` | CDN loading, shared Back to top, current technology/form notes on Colophon |
-| `js/help.js` | Support array, generated cards, search/category/sort, delegated selection, effects, planning estimate, field validation and reset |
-| `js/index.js` | Generated next-step suggestion and another-suggestion action |
-| `js/animals.js` | Existing sample catalogue migrated to jQuery, search/species/age filters, empty state and reset |
-| `old-js-version.js` | Verbatim archive of all four original scripts; not linked or executed |
-| `AI_LOG.md` | Honest record of AI-generated implementation and the user's requests |
-
-### Requirements map
-
-| Requirement | Where to demonstrate it |
-| --- | --- |
-| Three vanilla rewrites and comparison comments | `main.js`: show/hide Back to top; `help.js`: `renderOptions` and validation |
-| ID, class, element, attribute and filter selectors | `#support-request-form`, `.help-options`, `main`, `[data-choose]`, `:checked`, `:not(...)` |
-| Traversal | `.find()` gets descendants; `.closest('.card')` gets the clicked card; `.parent()` places field errors; `.siblings('label')` finds the checkbox label; `.each()` checks fields |
-| Two chains of at least three methods | Back-to-top construction; card construction; success confirmation chain (explained in a comment) |
-| `.text()`, `.html()`, `.val()`, `.attr()`, `.prop()` | Safe messages, trusted existing label markup, form values, ARIA/data attributes and live checked/required properties |
-| Existing classes only | `is-hidden`, `is-selected`, `has-error`, `is-success` and already-used Bootstrap utilities; no CSS rules added |
-| Array-built list | Six support objects are rendered by `.appendTo()`; these cards are absent from source HTML |
-| `.on()` events | `click`, `input`, `change`, `submit`, `reset`, `scroll`, image `error`; all interactive feature bindings use `.on()` |
-| Delegation | `#support-option-list` listens for clicks on `[data-choose]`, including buttons recreated by filtering |
-| Meaningful effects | `.slideToggle(200)` opens filters; `.fadeIn(180/220)` reveals selection/success; `.fadeOut(150)` removes an outdated success; `.animate()` scrolls to top |
-| Completion callback | Filter opening focuses search; success fade-in focuses its confirmation |
-| Complete form validation | Every user-editable input, select and textarea; hidden configuration/honeypot are intentionally excluded |
-| Validation details | Trimmed text, name length, email/phone formats, contact radio group, support type, integer quantity 1–20, date not in past, native validity for time and other controls |
-| Reset after success | Summary is captured, all form fields/errors/selection reset, then the success is displayed |
-
-The acknowledgement checkbox is optional, as in the original form. Phone is required for phone contact; any nonempty phone is checked even when email contact is chosen. Fields keep `required`, `type`, `min` and `max`. `noValidate` allows the submit handler to display all adjacent errors instead of the browser stopping at its first popup; native `ValidityState` is still checked. Real server-side validation would remain necessary.
-
-`.text()` outputs text literally, including angle brackets. `.html()` parses markup, so it is used only to copy the trusted existing checkbox label; user input never reaches it. `.attr('checked')` describes the markup attribute; `.prop('checked')` gives the current boolean after a click.
-
-### Verification on 2026-11-05
-
-- Syntax checks passed for all four current JavaScript files; `git diff --check` passed.
-- All original HTML and CSS files were compared with base commit `a49f535b50e07847706b499f2bee247a579cf27a` and are unchanged.
-- Browser checks: home suggestion changes; support filtering; delegated card choice after rendering; selected support effort; per-field name/email/phone/contact errors; immediate error clearing; checkbox acknowledgement; successful summary and form reset; support empty state; filter open/close; animal species/age filtering; Colophon loading.
-- Browser inspection found and fixed an inverted visibility condition on the animal empty-state message.
-- No site-origin console errors were observed in the inspected flows. The cloud browser emitted unrelated extension metadata errors; those are not site code.
-- A full responsive, keyboard and offline/CDN-failure pass has not been completed. Recheck those in the student's own browser before submission.
-- Existing sample animal records and remote stock-image URLs were retained from the previous script. They are not verified shelter adoption listings. Authentic-photo source cleanup remains a separate existing content issue.
-
-### Как объяснить на защите
-
-1. `main.js` загружает jQuery. Promise гарантирует порядок загрузки, а `$(function () {})` ждёт готовности DOM.
-2. `renderOptions()` фильтрует массив, очищает контейнер через `.empty()` и создаёт карточки через `.appendTo()`.
-3. Делегированный `.on('click', '[data-choose]', handler)` установлен на общий контейнер. Событие кнопки всплывает к нему, поэтому обработчик работает и после пересоздания карточек.
-4. `$(this)` — нажатая кнопка. `.closest('.card')` находит её карточку; классы выделения меняются через `.addClass()` и `.removeClass()`.
-5. Поиск слушает `input`, списки — `change`, форма — `submit`. `preventDefault()` останавливает исходный POST в FormSubmit.
-6. `validate()` проверяет каждое поле, ставит `has-error`, `aria-invalid` и сообщение рядом. После исправления конкретная ошибка удаляется.
-7. Валидная форма сначала создаёт безопасный текст подтверждения, затем сбрасывается. Это демонстрация: сообщение не означает, что приют получил заявку.
-8. `.slideToggle()` раскрывает фильтры; `.fadeIn()` показывает выбор и успех; `.fadeOut()` убирает устаревшее подтверждение. Callback выполняется после эффекта.
-9. `.html()` допустим для доверенной разметки, но ввод посетителя выводится через `.text()`. `.val()` читает значение поля, `.attr()` — атрибут, `.prop()` — текущее свойство, например `checked`.
-10. Исходные решения сохранены в `old-js-version.js`, чтобы сравнить их с jQuery. Архив не подключён и не создаёт вторые обработчики.
-
-### Submission and Git history
-
-No commits or pushes were made by the assistant. Apply the supplied plain diff with `git apply`, review it, and create commits yourself using your own Git name and GitHub-linked email. This diff contains no author or co-author metadata and does not change Git identity settings.
-
-The assignment requires **six commits across at least three different days for an individual project**. This delivery cannot establish that history; inspect existing history and complete genuine future commits as needed. Do not fabricate dates. Defense and personal review are still required.
-
-Official API reference: https://api.jquery.com/
+Practice changing a topic object, adding a validation rule, altering the count message and rewriting a short jQuery handler using native DOM APIs. During the actual defense follow the brief's rule: documentation is allowed, live help from people or AI is not.

@@ -63,3 +63,18 @@ Prompts recorded for this work:
 2. “продолжи с того места где я тебя остановил но ни в коем случае сам ничего не отправляй в гитхаб что бы ты не стал контрибутаром, я должен сам все сделать, ты покажи как мне клонировать в своей проект твои изменения и отправить изменения в гитхаб”
 
 This implementation was AI-generated, not merely explained by AI. The assignment's stated policy restricts AI-written code; this log does not assert compliance with that policy or claim the student independently wrote the changes. The student must review and understand every submitted line and is responsible for the live defense. No dates, commits or testing by the student were invented.
+
+## Endterm continuation assistance log (2026-11-13)
+
+User requests:
+
+1. “следуй требованиям из endterm_project и обьясни мне мой проект, скажи как защитить его проеподователю и что я могу на данном этапе залить?”
+2. “помоги довести до конца мой проект что бы не было вопросов если так можно в инструкции endterm_project, https://github.com/sikkenshe/i-am-alive.git нам нельзя менять хтмл и css, только java script. Так же после изменении ты поможешь загрузить все в гитхаб”
+
+AI read the supplied Endterm document and inspected the uploaded source, then cloned the same public repository at `15965badc8d46acf6b071b9446944637bf089188`. It consulted the existing shelter sources and official jQuery event documentation. AI wrote the changes to the four active JavaScript files, updated README/this log/the quality checklist, and prepared an authorless patch. HTML/CSS remained byte-for-byte unchanged from that fetched baseline. No commit, push, tag, date alteration or Git identity change was made.
+
+The implementation separates native navigation/home/catalogue features from the jQuery support planner, replaces unverified animal profiles with published help topics, adds a removable question shortlist, replaces arbitrary effort points with the visitor's package count, creates a complete downloadable personal plan, makes quantity conditional, clarifies local-only behaviour and records photo provenance at runtime.
+
+Verification: four active scripts pass syntax checks, `git diff --check` passes, frozen HTML/CSS match the fetched baseline, and 76 jsdom DOM/event assertions pass. The environment prevented a rendered browser from launching. No claim is made about new physical-device testing, current screenshots, W3C validation, live CDN/SRI or actual browser download clicks. These remain in the student checklist.
+
+Course constraints that code alone cannot resolve: the supplied policy disallows AI-written code; the existing local photographs are attributed published images rather than the student's own photographs; final commit/day evidence and personal defense must be genuine. This entry discloses AI implementation assistance and does not claim independent student authorship or full compliance with those constraints.
