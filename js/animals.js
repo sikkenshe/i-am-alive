@@ -102,3 +102,68 @@
   clear.addEventListener('click', function () { shortlist.clear(); renderQuestions(); renderTopics(); });
   renderQuestions(); renderTopics();
 })();
+
+// Extend the frozen Animals page using native DOM APIs and existing classes.
+(function () {
+  const animalGroups = [
+    {
+      title: 'Cats',
+      description: 'Cats need a calm place to settle in and opportunities to hide, rest and play. Prepare their space before considering adoption.',
+      needs: ['Provide a quiet space with a safe hiding place.', 'Prepare food and water bowls, a litter tray and a scratching post.', 'Let the cat approach people at its own pace.']
+    },
+    {
+      title: 'Rabbits',
+      description: 'Rabbits need a secure living area with room to move and places to hide. Preparing a suitable home involves more than buying a small cage.',
+      needs: ['Provide space to exercise and safe hiding places.', 'Keep electrical wires and other household hazards out of reach.', 'Plan suitable food, fresh water and compatible rabbit companionship.']
+    }
+  ];
+  function sectionWithTitle(title) {
+    return Array.from(document.querySelectorAll('main section')).find(function (section) {
+      const heading = section.querySelector('h2');
+      return heading && heading.textContent.trim() === title;
+    });
+  }
+  function element(tag, classes, text) {
+    const node = document.createElement(tag);
+    node.className = classes;
+    node.textContent = text || '';
+    return node;
+  }
+
+  const care = sectionWithTitle('Animals and Care');
+  if (care) {
+    care.querySelectorAll('figure img').forEach(function (image) {
+      image.classList.remove('w-100');
+      image.classList.add('animal-image', 'object-fit-contain', 'w-auto', 'd-block', 'mx-auto');
+    });
+  }
+
+  const other = sectionWithTitle('Other Animals');
+  if (!other) return;
+  // Replace the brief rabbit paragraph rather than duplicating it.
+  other.querySelectorAll('article').forEach(function (article) { article.remove(); });
+  const note = element('p', 'text-muted', 'General care guidance for cats and rabbits. Ask the shelter which animals are currently in its care and available for adoption.');
+  const row = element('div', 'row g-4');
+  animalGroups.forEach(function (group) {
+    const column = element('div', 'col-12 col-md-6');
+    const article = element('article', 'card h-100');
+    const body = element('div', 'card-body');
+    const list = element('ul', 'mb-3');
+    group.needs.forEach(function (need) { list.append(element('li', 'mb-2', need)); });
+    body.append(element('h3', 'h5 fw-semibold', group.title), element('p', '', group.description), list);
+    article.append(body); column.append(article); row.append(column);
+  });
+  const contact = element('a', 'btn btn-outline-success mt-3', 'Ask about current animals');
+  contact.href = '#contact';
+  other.append(note, row, contact);
+})();
+
+document.querySelectorAll('main section').forEach(function (section) {
+  const heading = section.querySelector('h2');
+
+  if (heading && heading.textContent.trim() === 'Animals and Care') {
+    section.querySelectorAll('figure').forEach(function (figure) {
+      figure.remove();
+    });
+  }
+});

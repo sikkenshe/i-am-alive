@@ -9,26 +9,43 @@
     return node;
   }
 
-  const topButton = element('button', 'btn btn-success position-fixed bottom-0 end-0 m-3 shadow is-hidden', 'Back to top');
-  topButton.type = 'button';
-  topButton.setAttribute('aria-label', 'Return to the top of this page');
-  document.body.append(topButton);
-  function updateTop() { topButton.classList.toggle('is-hidden', window.scrollY <= 300); }
-  window.addEventListener('scroll', updateTop, { passive: true });
-  topButton.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
-    document.querySelector('header').focus({ preventScroll: true });
+  // Reuse the existing 280px crop rule and Bootstrap width utility.
+  // The image files and frozen HTML/CSS stay unchanged.
+  document.querySelectorAll('.photo-gallery img, .animal-list img').forEach(function (image) {
+    image.classList.add('animal-image', 'w-100');
   });
-  document.querySelector('header').setAttribute('tabindex', '-1');
-  updateTop();
 
-  // Earlier commits removed this existing page from three menus. Restore it in code.
-  const navigation = document.querySelector('.navbar-nav');
-  if (navigation && !navigation.querySelector('a[href="colophon.html"]')) {
-    const item = element('li', 'nav-item', '');
-    const link = element('a', 'nav-link px-md-3', 'Colophon');
-    link.href = 'colophon.html'; item.append(link); navigation.append(item);
+  // Remove the whole coursework demonstration from the rendered page.
+  document.querySelectorAll('.html-demo').forEach(function (section) {
+    section.remove();
+  });
+
+  // Remove top-return links on every page, including their empty paragraphs.
+  document.querySelectorAll('a[href]').forEach(function (link) {
+    const target = new URL(link.getAttribute('href'), location.href);
+    if (target.origin !== location.origin || target.pathname !== location.pathname || target.hash !== '#top') return;
+    const parent = link.parentElement;
+    link.remove();
+    if (parent && parent.tagName === 'P' && !parent.children.length && !parent.textContent.trim()) parent.remove();
+  });
+
+  
+document.querySelectorAll('a[href]').forEach(function (link) {
+  const target = new URL(link.getAttribute('href'), location.href);
+
+  if (
+    target.origin === location.origin &&
+    target.pathname.endsWith('/colophon.html')
+  ) {
+    const menuItem = link.closest('li.nav-item');
+
+    if (menuItem) {
+      menuItem.remove();
+    } else {
+      link.remove();
+    }
   }
+});
 
   const currentPage = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.navbar .nav-link').forEach(function (link) {
@@ -75,6 +92,7 @@
   });
 })();
 
+
 // Only help.html needs jQuery. Existing HTML script links remain untouched.
 window.iamAliveReady = new Promise(function (resolve) {
   const form = document.querySelector('#support-request-form');
@@ -114,3 +132,11 @@ window.iamAliveReady = new Promise(function (resolve) {
   timeout = window.setTimeout(function () { finish(false); }, 12000);
   document.head.append(script);
 });
+
+(function () {
+  const menu = document.querySelector('.navbar');
+
+  if (menu) {
+    menu.classList.add('sticky-top');
+  }
+})();
